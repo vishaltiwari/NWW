@@ -1,0 +1,12 @@
+[
+  {
+     "id":"document",
+     "version":"1.0"
+  },  
+  {
+      "id": "Object",
+      "someComplexProperty": {
+          "cartographicRadians": [1.0, 2.0, 3.0]
+      }
+  }
+]

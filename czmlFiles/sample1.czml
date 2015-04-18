@@ -1,0 +1,214 @@
+[
+    {
+       "id":"document",
+       "version":"1.0"
+    }, 
+    {
+       "id":"origin",
+       "position":{
+         "cartographicDegrees":[0,0,0],
+	 "label":{
+	   "font":"11pt Lucida Console",
+	   "show":true,
+	   "text":"ORIGIN"
+	 }
+       }
+    },
+    {
+        "id": "Wedge",
+        "polygon": {
+            "positions":{
+	      "referenceFrame" : "FIXED",
+	      "cartographicDegrees":[
+		0,0,0,
+	      0,5,0,
+	      5,5,556600,
+	      5,0,556600,
+	      0,0,0
+
+	      ]
+	    },
+	    "material":{
+	      "solidColor":{
+	        "color":{
+		  "rgba":[
+		    255,255,0,100
+		  ]
+		}
+	      }
+	    },
+	    "outline":[
+	      {
+	        "boolean" : true
+	      }
+	    ],
+	    "perPositionHeight":[
+	       {   
+		    "boolean":true
+	       }   
+	    ],  
+	    "show":[
+	      {
+	         "boolean" : true
+	      }
+	    ]
+        }
+    },
+    {
+        "id": "Side1TriangleLower",
+        "polygon": {
+            "positions":{
+	      "referenceFrame" : "FIXED",
+	      "cartographicDegrees":[
+		0,0,0,
+	        0,5,0,
+	        0,5,556600,
+	        0,0,0
+
+	      ]
+	    },
+	    "material":{
+	      "solidColor":{
+	        "color":{
+		  "rgba":[
+		    255,255,0,100
+		  ]
+		}
+	      }
+	    },
+	    "outline":[
+	      {
+	        "boolean" : true
+	      }
+	    ],
+	    "perPositionHeight":[
+	       {   
+		    "boolean":true
+	       }   
+	    ],  
+	    "show":[
+	      {
+	         "boolean" : true
+	      }
+	    ]
+        }
+    },
+    {
+        "id": "Side1TriangleUpper",
+        "polygon": {
+            "positions":{
+	      "referenceFrame" : "FIXED",
+	      "cartographicDegrees":[
+		0,0,0,
+	        0,0,556600,
+	        0,5,556600,
+	        0,0,0
+
+	      ]
+	    },
+            "material":{
+	      "solidColor":{
+	        "color":{
+		  "rgba":[
+		    255,255,0,100
+		  ]
+		}
+	      }
+	    },
+	    "outline":[
+	      {
+	        "boolean" : true
+	      }
+	    ],
+	    "perPositionHeight":[
+	       {   
+		    "boolean":true
+	       }   
+	    ],  
+	    "show":[
+	      {
+	         "boolean" : true
+	      }
+	    ]
+        }
+    },
+    {
+        "id": "Side2",
+        "polygon": {
+            "positions":{
+	      "referenceFrame" : "FIXED",
+	      "cartographicDegrees":[
+		0,0,0,
+	        0,0,556600,
+	        5,0,556600,
+	        0,0,0
+
+	      ]
+	    },
+            "material":{
+	      "solidColor":{
+	        "color":{
+		  "rgba":[
+		    255,255,0,100
+		  ]
+		}
+	      }
+	    },
+	    "outline":[
+	      {
+	        "boolean" : true
+	      }
+	    ],
+	    "perPositionHeight":[
+	       {   
+		    "boolean":true
+	       }   
+	    ],  
+	    "show":[
+	      {
+	         "boolean" : true
+	      }
+	    ]
+        }
+    },
+    {
+        "id": "Side3",
+        "polygon": {
+            "positions":{
+	      "referenceFrame" : "FIXED",
+	      "cartographicDegrees":[
+		0,5,0,
+	        0,5,556600,
+	        5,5,556600,
+	        0,5,0
+
+	      ]
+	    },
+            "material":{
+	      "solidColor":{
+	        "color":{
+		  "rgba":[
+		    255,255,0,100
+		  ]
+		}
+	      }
+	    },
+	    "outline":[
+	      {
+	        "boolean" : true
+	      }
+	    ],
+	    "perPositionHeight":[
+	       {   
+		    "boolean":true
+	       }   
+	    ],  
+	    "show":[
+	      {
+	         "boolean" : true
+	      }
+	    ]
+        }
+    }
+
+]

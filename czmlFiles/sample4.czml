@@ -1,0 +1,30 @@
+[
+    {
+       "id":"document",
+       "version":"1.0"
+    },  
+    {
+        "id": "Wedge",
+        "polygon": {
+            "positions":{
+            "referenceFrame" : "FIXED",
+	      "cartographicDegrees":[
+		 -108.0, 25.0, 100000,
+		 -100.0, 25.0, 100000,
+		 -100.0, 30.0, 100000,
+		 -108.0, 30.0, 300000
+	      ]
+	    },
+	    "perPositionHeight":[
+	        {
+		  "boolean":true
+		}
+	      ],
+	    "show":[
+	      {
+	         "boolean" : true
+	      }
+	    ]
+        }
+    }
+]
