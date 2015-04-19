@@ -5,6 +5,14 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 import javax.swing.text.html.parser.Parser;
 
@@ -17,6 +25,31 @@ import org.json.simple.parser.ParseException;
 
 public class createCZML{
 	
+	public static ArrayList createPolygon(int i){
+		float h_meters=5566;
+		float h = i*h_meters;
+		float hDegree = h/111319;
+		ArrayList list = new ArrayList();
+		
+		list.add(0);
+		list.add(0);
+		list.add(h);
+		
+		list.add(hDegree);
+		list.add(0);
+		list.add(h);
+		
+		list.add(hDegree);
+		list.add(5);
+		list.add(h);
+		
+		list.add(0);
+		list.add(5);
+		list.add(h);
+		
+		return list;
+		
+	}
 	public static void main(String args[]) throws ParseException
 	{
 		//dummy simulation, with a hypothetical water rise on a wedge
@@ -24,13 +57,103 @@ public class createCZML{
 		try{
 			
 			//Head of the doc.
-			String filepath = "/home/vishal/NWW/czmlFiles/sample1.czml";
+			String filepath = "/home/vishal/NWW/czmlFiles/staticWedge.czml";
 			File file = new File("/home/vishal/NWW/czmlFiles/outfile.czml");
 			if(!file.exists()){
 				file.createNewFile();
 			}
 			//Reading the Wedge from the czml file:
 			JSONArray czmlObj = (JSONArray) parser.parse(new FileReader(filepath));
+			
+			/*DateFormat gmtFormat = new SimpleDateFormat();
+			TimeZone gmtTime = TimeZone.getTimeZone("GMT");
+			gmtFormat.setTimeZone(gmtTime);*/
+			
+			Calendar startDate = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
+			startDate.set(2012, 8, 4, 0, 0, 0);
+			
+			//System.out.println(startDate.getTime());
+			DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+			df.setTimeZone(TimeZone.getTimeZone("UTC"));
+			String ISOStartTime = df.format(startDate.getTime());
+			//System.out.println(ISOdate);
+			startDate.add(Calendar.HOUR, 1);
+			String ISOEndTime = df.format(startDate.getTime());
+			for(int i=1 ; i<=100 ; i++){
+				JSONObject obj = new JSONObject();
+				String timeStamp = ISOStartTime+"/"+ISOEndTime;
+				//Update the time by 1 hr.
+				ISOStartTime = ISOEndTime;
+				startDate.add(Calendar.HOUR, 1);
+				ISOEndTime = df.format(startDate.getTime());
+				
+				obj.put("id", "id"+i);
+				obj.put("availability", timeStamp);
+				
+				JSONArray pos = new JSONArray();
+				ArrayList arr = createPolygon(i);
+				pos.addAll(arr);
+				
+				//Add the polygon created
+				obj.put("polygon",new JSONObject().put("positions", new JSONObject().put("cartographicDegrees", pos)));
+				
+				
+				//Color for the Polygon
+				JSONArray rgbaColor = new JSONArray();
+				rgbaColor.add(0);
+				rgbaColor.add(0);
+				rgbaColor.add(255);
+				rgbaColor.add(255);
+				
+				
+				JSONObject rgba = new JSONObject();
+				rgba.put("rgba",rgbaColor);
+				
+				JSONObject color = new JSONObject();
+				color.put("color", rgba);
+				
+				JSONObject solidColor = new JSONObject();
+				solidColor.put("solidColor", color);
+				
+				JSONObject material = new JSONObject();
+				obj.put("material", solidColor);
+				
+				//Outline
+				JSONObject bool = new JSONObject();
+				bool.put("boolean", true);
+				JSONArray outlineArr = new JSONArray();
+				outlineArr.add(bool);
+				obj.put("outline", outlineArr);
+				
+				//perpositionHeight
+				JSONObject bool2 = new JSONObject();
+				bool2.put("boolean", true);
+				JSONArray perpositionHeightArr = new JSONArray();
+				perpositionHeightArr.add(bool2);
+				obj.put("perPositionHeight", perpositionHeightArr);
+				
+				//show
+				JSONObject bool3 = new JSONObject();
+				bool3.put("boolean", true);
+				JSONArray showArr = new JSONArray();
+				showArr.add(bool3);
+				obj.put("show", showArr);
+				
+				czmlObj.add(obj);
+			}
+			
+			//Write it in  ISO8601 interval format
+			/*int year = startDate.getTime().getYear();
+			int month = startDate.getTime().getMonth();
+			int date = startDate.getTime().getDate();
+			int hour = startDate.getTime().getHours();
+			int mins = startDate.getTime().getMinutes();
+			int secs = startDate.getTime().getSeconds();
+			
+			String StartTimeStamp = year+"-"+month+"-"+date+"T"+hour+":"+mins+":"+secs+"Z";
+			System.out.println(StartTimeStamp);*/
+			
+			//A rise of 5566 meters/hr, 
 						
 			//writing to file
 			FileWriter fw = new FileWriter(file.getAbsoluteFile());
