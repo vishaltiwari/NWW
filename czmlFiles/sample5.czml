@@ -1,0 +1,88 @@
+[
+    {
+       "id":"document",
+       "version":"1.0"
+    },
+    {
+	"id": "polygon1",
+		"availability":"2012-08-04T00:00:00Z/2012-08-05T12:00:00Z",
+		"polygon": {
+			"positions":{
+				"referenceFrame" : "FIXED",
+				"cartographicDegrees":[
+				  0,0,0,
+				  0,5,0,
+				  5,5,0,
+				  5,0,0,
+				  0,0,0
+
+					]
+			},
+			"material":{
+				"solidColor":{
+					"color":{
+						"rgba":[
+							0,0,255,100
+							]
+					}
+				}
+			},
+			"outline":[
+			  {
+				"boolean" : true
+			  }
+			],
+			"perPositionHeight":[
+			   {
+				"boolean":true
+			   }
+			],
+			"show":[
+			   {
+				"boolean" : true
+			   }
+			]
+		}
+    },
+    {
+	"id": "polygon2",
+		"availability":"2012-08-05T00:00:00Z/2012-08-06T12:00:00Z",
+		"polygon": {
+			"positions":{
+				"referenceFrame" : "FIXED",
+				"cartographicDegrees":[
+				  10,0,0,
+				  10,5,0,
+				  15,5,0,
+				  15,0,0,
+				  10,0,0
+
+					]
+			},
+			"material":{
+				"solidColor":{
+					"color":{
+						"rgba":[
+							255,0,255,100
+							]
+					}
+				}
+			},
+			"outline":[
+			  {
+				"boolean" : true
+			  }
+			],
+			"perPositionHeight":[
+			   {
+				"boolean":true
+			   }
+			],
+			"show":[
+			   {
+				"boolean" : true
+			   }
+			]
+		}
+    }
+]
