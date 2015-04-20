@@ -12,6 +12,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.TimeZone;
 
 import javax.swing.text.html.parser.Parser;
@@ -25,11 +28,12 @@ import org.json.simple.parser.ParseException;
 
 public class createCZML{
 	
-	public static ArrayList createPolygon(int i){
+	public static JSONArray createPolygon(int i){
+		JSONArray list = new JSONArray();
+		
 		float h_meters=5566;
 		float h = i*h_meters;
 		float hDegree = h/111319;
-		ArrayList list = new ArrayList();
 		
 		list.add(0);
 		list.add(0);
@@ -47,8 +51,7 @@ public class createCZML{
 		list.add(5);
 		list.add(h);
 		
-		return list;
-		
+		return list;		
 	}
 	public static void main(String args[]) throws ParseException
 	{
@@ -80,7 +83,8 @@ public class createCZML{
 			startDate.add(Calendar.HOUR, 1);
 			String ISOEndTime = df.format(startDate.getTime());
 			for(int i=1 ; i<=100 ; i++){
-				JSONObject obj = new JSONObject();
+				//JSONObject obj = new JSONObject();
+				LinkedHashMap<String,Object> obj = new LinkedHashMap<String,Object>();
 				String timeStamp = ISOStartTime+"/"+ISOEndTime;
 				//Update the time by 1 hr.
 				ISOStartTime = ISOEndTime;
@@ -90,12 +94,14 @@ public class createCZML{
 				obj.put("id", "id"+i);
 				obj.put("availability", timeStamp);
 				
-				JSONArray pos = new JSONArray();
-				ArrayList arr = createPolygon(i);
-				pos.addAll(arr);
+				JSONArray cartographicDegreesArr = createPolygon(i);
 				
 				//Add the polygon created
-				obj.put("polygon",new JSONObject().put("positions", new JSONObject().put("cartographicDegrees", pos)));
+				JSONObject position = new JSONObject();
+				position.put("referenceFrame", "FIXED");
+				position.put("cartographicDegrees", cartographicDegreesArr);
+				
+				obj.put("polygon",position);
 				
 				
 				//Color for the Polygon
@@ -139,7 +145,10 @@ public class createCZML{
 				showArr.add(bool3);
 				obj.put("show", showArr);
 				
-				czmlObj.add(obj);
+				//Convert the hashmap to JSONObject
+				JSONObject orderedJson = new JSONObject(obj);
+				
+				czmlObj.add(orderedJson);
 			}
 			
 			//Write it in  ISO8601 interval format
