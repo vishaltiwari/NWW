@@ -150,6 +150,9 @@ public class createCZML{
 				
 				czmlObj.add(orderedJson);
 			}
+			//Testing the sandbox
+			Sandbox test = new Sandbox();
+			test.go();
 			
 			//Write it in  ISO8601 interval format
 			/*int year = startDate.getTime().getYear();

@@ -22,6 +22,7 @@ public class Sandbox {
 		packet.writeId("Test");
 		BillboardCesiumWriter billboard = packet.openBillboardProperty();
 		billboard.writeColorProperty(123, 67, 0, 255);
+		billboard.writeHorizontalOriginPropertyReference("CENTER");
 		//billboard.writeImageProperty(URI.create("http://cesium.agi.com/images/CesiumHeaderLogo.png"), CesiumResourceBehavior.EMBED);
 		billboard.close();
 		PositionCesiumWriter position = packet.openPositionProperty();
