@@ -1,6 +1,9 @@
 package gov.nasa.worldwindx.examples.WedgeWater;
 
 import java.awt.List;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
@@ -20,56 +23,26 @@ public class CzmlWriterExample {
 		StringWriter sw = new StringWriter();
 		CesiumOutputStream output = new CesiumOutputStream(sw);
 		output.setPrettyFormatting(true);
-		CesiumStreamWriter stream = new CesiumStreamWriter();
-		PacketCesiumWriter packet = stream.openPacket(output);
-		//Write the document packet
-		packet.writeId("document");
-		packet.writeVersion("1.0");
 		
-		packet.close();
-		//Write a polygon packet:
-		PacketCesiumWriter packet2 = stream.openPacket(output);
-		packet2.writeId("Wedge");
-		cesiumlanguagewriter.PolygonCesiumWriter polygon = packet2.openPolygonProperty();
-		
-		//List<cesiumlanguagewriter.CartographicDegrees> positions = new ArrayList<cesiumlanguagewriter.CartographicDegrees>();
-		float h = 5*111319;
-		Cartographic object1 = new Cartographic(0, 0, 0);
-		Cartographic object2 = new Cartographic(0, 5.0, 0);
-		Cartographic object3 = new Cartographic(5, 5, h);
-		Cartographic object4 = new Cartographic(5, 0, h);
-		Cartographic object5 = new Cartographic(0, 0, 0);
-		
-		
-		ArrayList<Cartographic> arr = new ArrayList<Cartographic>();
-		arr.add(object1);
-		arr.add(object2);
-		arr.add(object3);
-		arr.add(object4);
-		arr.add(object5);
-		
-		polygon.writePositionsPropertyCartographicDegrees(arr);
-		//polygon.writePositionsPropertyReferences(references);
-		//Material Property
-		cesiumlanguagewriter.MaterialCesiumWriter materialWriter = polygon.openMaterialProperty();
-		SolidColorMaterialCesiumWriter solidColorWriter = materialWriter.openSolidColorProperty();
-		cesiumlanguagewriter.ColorCesiumWriter colorWriter = solidColorWriter.openColorProperty();
-		colorWriter.writeRgba(255, 255, 0, 100);
-		colorWriter.close();
-		solidColorWriter.close();
-		materialWriter.close();
-		
-		polygon.writeOutlineProperty(true);
-		polygon.writePerPositionHeightProperty(true);
-		polygon.writeShowProperty(true);
-		
-		
-		packet2.close();
-				
+		//Write a polygon packet[Make the Static geometry(i.e. Wedge)]:
+		CreateWedge wedge = new CreateWedge();
+		wedge.create(output);
 		sw.close();
 		
 		System.out.println(sw.toString());
-		
-		
+		try{
+			File file = new File("/home/vishal/NWW/czmlFiles/outfile.czml");
+			if (!file.exists()) {
+                file.createNewFile();
+            }
+
+            FileWriter fw = new FileWriter(file.getAbsoluteFile()) ;
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write("[\n\t"+sw.toString()+"\n]");
+			bw.close();
+		}
+		catch (IOException e){
+			System.out.println("Error while writing");
+		}
 	}
 }
