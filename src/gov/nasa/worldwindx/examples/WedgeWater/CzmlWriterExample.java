@@ -5,11 +5,14 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
 
+import agi.internal.agi.foundation.cesium.agi.foundation.cesium.ColorCesiumWriter;
+import agi.internal.agi.foundation.cesium.agi.foundation.cesium.MaterialCesiumWriter;
 import agi.internal.agi.foundation.cesium.agi.foundation.cesium.PolygonCesiumWriter;
 import cesiumlanguagewriter.Cartographic;
 import cesiumlanguagewriter.CesiumOutputStream;
 import cesiumlanguagewriter.CesiumStreamWriter;
 import cesiumlanguagewriter.PacketCesiumWriter;
+import cesiumlanguagewriter.SolidColorMaterialCesiumWriter;
 
 public class CzmlWriterExample {
 	public static void main(String args[]) throws IOException{
@@ -47,6 +50,19 @@ public class CzmlWriterExample {
 		
 		polygon.writePositionsPropertyCartographicDegrees(arr);
 		//polygon.writePositionsPropertyReferences(references);
+		//Material Property
+		cesiumlanguagewriter.MaterialCesiumWriter materialWriter = polygon.openMaterialProperty();
+		SolidColorMaterialCesiumWriter solidColorWriter = materialWriter.openSolidColorProperty();
+		cesiumlanguagewriter.ColorCesiumWriter colorWriter = solidColorWriter.openColorProperty();
+		colorWriter.writeRgba(255, 255, 0, 100);
+		colorWriter.close();
+		solidColorWriter.close();
+		materialWriter.close();
+		
+		polygon.writeOutlineProperty(true);
+		polygon.writePerPositionHeightProperty(true);
+		polygon.writeShowProperty(true);
+		
 		
 		packet2.close();
 				
