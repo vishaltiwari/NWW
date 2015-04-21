@@ -27,6 +27,11 @@ public class CzmlWriterExample {
 		//Write a polygon packet[Make the Static geometry(i.e. Wedge)]:
 		CreateWedge wedge = new CreateWedge();
 		wedge.create(output);
+		
+		//Add the dynamic polygons to czml file
+		WaterRise water = new WaterRise();
+		water.addDynamicRise(output);
+		
 		sw.close();
 		
 		System.out.println(sw.toString());

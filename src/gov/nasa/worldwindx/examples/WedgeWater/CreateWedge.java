@@ -106,10 +106,10 @@ public class CreateWedge {
 			
 			polygon.writePositionsPropertyCartographicDegrees(listofPositions.get(i));
 
-			JulianDate startJD = new JulianDate(new DateTime(startDate.getTime()));
-			JulianDate endJD = new JulianDate(new DateTime(endDate.getTime()));
+			//JulianDate startJD = new JulianDate(new DateTime(startDate.getTime()));
+			//JulianDate endJD = new JulianDate(new DateTime(endDate.getTime()));
 			
-			packet.writeAvailability(startJD, endJD);
+			//packet.writeAvailability(startJD, endJD);
 			//polygon.writePositionsPropertyReferences(references);
 			//Material Property
 			cesiumlanguagewriter.MaterialCesiumWriter materialWriter = polygon.openMaterialProperty();
