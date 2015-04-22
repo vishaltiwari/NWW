@@ -132,7 +132,6 @@
         }
     },
     {
-        "id": "Side2",
         "polygon": {
             "positions":{
 	      "referenceFrame" : "FIXED",
@@ -144,6 +143,7 @@
 
 	      ]
 	    },
+        "id": "Side2",
             "material":{
 	      "solidColor":{
 	        "color":{

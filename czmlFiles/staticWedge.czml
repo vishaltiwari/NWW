@@ -4,17 +4,6 @@
        "version":"1.0"
     }, 
     {
-       "id":"origin",
-       "position":{
-         "cartographicDegrees":[0,0,0],
-	 "label":{
-	   "font":"11pt Lucida Console",
-	   "show":true,
-	   "text":"ORIGIN"
-	 }
-       }
-    },
-    {
         "id": "Wedge",
         "polygon": {
             "positions":{
