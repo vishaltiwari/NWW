@@ -78,10 +78,37 @@ public class ExtractGeometry {
 					System.out.println(building.getMeasuredHeight().getValue());
 					//List<BoundarySurfaceProperty> list = building.getBoundedBySurface();
 					//System.out.println(list);
+					FeatureWalker surfacewalker = new FeatureWalker(){
+						public void visit(GroundSurface groundSurface){
+							System.out.println("GroundSurface ID"+groundSurface.getId());
+							//groundSurface.get
+							GMLWalker geomwalker = new GMLWalker(){
+								public void visit(LinearRing linearRing)
+								{
+									System.out.println("inside the linearRing visitor");
+									if(linearRing.isSetPosList()){
+										System.out.println(linearRing.getSrsDimension());
+										DirectPositionList posList = linearRing.getPosList();
+										System.out.println(posList.getSrsDimension());
+										List<Double> points = posList.toList3d();
+										
+										for(int i=0 ; i<points.size() ;i+=3){
+											double[] vals = new double[]{points.get(i) , points.get(i+1),points.get(i+2)};
+											System.out.println(vals[0]+" "+vals[1]+" "+vals[2]);
+										}
+									}
+								}
+							};
+							groundSurface.accept(geomwalker);
+						}
+					};
+					
+					building.accept(surfacewalker);
+					
 				}
 			};
 			
-			FeatureWalker surfacewalker = new FeatureWalker(){
+			/*FeatureWalker surfacewalker = new FeatureWalker(){
 				public void visit(GroundSurface groundSurface){
 					System.out.println("GroundSurface ID"+groundSurface.getId());
 					//groundSurface.get
@@ -104,12 +131,12 @@ public class ExtractGeometry {
 						}
 					}
 				}
-			};
+			};*/
 			
 			//walker.visit
 			citymodel.accept(buildingwalker);
-			citymodel.accept(surfacewalker);
-			citymodel.accept(geomwalker);
+			//citymodel.accept(surfacewalker);
+			//citymodel.accept(geomwalker);
 		}
 		reader.close();
 		
