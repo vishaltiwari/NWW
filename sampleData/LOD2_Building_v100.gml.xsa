@@ -1,0 +1,498 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RegistryRoot defaultns="http://www.opengis.net/citygml/1.0">
+  <Envelope type="20">
+    <upperCorner type="98" />
+    <lowerCorner type="98" />
+    <pos type="98" />
+    <posList type="98" />
+    <coordinates type="98" />
+    <coord type="98">
+      <X type="99" />
+      <Y type="99" />
+      <Z type="99" />
+    </coord>
+  </Envelope>
+  <Box type="20">
+    <upperCorner type="98" />
+    <lowerCorner type="98" />
+    <pos type="98" />
+    <posList type="98" />
+    <coordinates type="98" />
+    <coord type="98">
+      <X type="99" />
+      <Y type="99" />
+      <Z type="99" />
+    </coord>
+  </Box>
+  <GridEnvelope type="31">
+    <low type="99" />
+    <high type="99" />
+  </GridEnvelope>
+  <Grid type="21">
+    <limits type="71">
+      <GridEnvelope />
+    </limits>
+    <axisName type="99" />
+  </Grid>
+  <RectifiedGrid type="21">
+    <description type="99" />
+    <name type="99" />
+    <limits type="71">
+      <GridEnvelope />
+    </limits>
+    <axisName type="99" />
+    <origin type="80">
+      <Point />
+    </origin>
+    <offsetVector type="99" />
+  </RectifiedGrid>
+  <Solid type="20">
+    <interior type="62">
+      <CompositeSurface />
+      <OrientableSurface />
+      <Surface />
+      <Polygon />
+      <TriangulatedSurface />
+      <Tin />
+    </interior>
+    <exterior type="62">
+      <CompositeSurface />
+      <OrientableSurface />
+      <Surface />
+      <Polygon />
+      <TriangulatedSurface />
+      <Tin />
+    </exterior>
+  </Solid>
+  <CompositeSolid type="20">
+    <solidMember type="60">
+      <Solid />
+      <CompositeSolid />
+    </solidMember>
+  </CompositeSolid>
+  <MultiSolid type="20">
+    <solidMember type="60">
+      <Solid />
+      <CompositeSolid />
+    </solidMember>
+    <solidMembers type="60">
+      <Solid />
+      <CompositeSolid />
+    </solidMembers>
+  </MultiSolid>
+  <MultiPoint type="24">
+    <pointMember type="80">
+      <Point />
+    </pointMember>
+    <pointMembers type="80">
+      <Point />
+    </pointMembers>
+  </MultiPoint>
+  <MultiSurface type="20">
+    <surfaceMember type="62">
+      <CompositeSurface />
+      <OrientableSurface />
+      <Surface />
+      <Polygon />
+      <TriangulatedSurface />
+      <Tin />
+      <TexturedSurface />
+    </surfaceMember>
+    <surfaceMembers type="62">
+      <CompositeSurface />
+      <OrientableSurface />
+      <Surface />
+      <Polygon />
+      <TriangulatedSurface />
+      <Tin />
+    </surfaceMembers>
+  </MultiSurface>
+  <MultiCurve type="20">
+    <curveMember type="63">
+      <LineString />
+      <Curve />
+      <OrientableCurve />
+      <CompositeCurve />
+    </curveMember>
+    <curveMembers type="63">
+      <LineString />
+      <Curve />
+      <OrientableCurve />
+      <CompositeCurve />
+    </curveMembers>
+  </MultiCurve>
+  <CompositeSurface type="22">
+    <surfaceMember type="62">
+      <CompositeSurface />
+      <OrientableSurface />
+      <Surface />
+      <Polygon />
+      <TriangulatedSurface />
+      <Tin />
+    </surfaceMember>
+  </CompositeSurface>
+  <Surface type="22">
+    <patches type="72">
+      <PolygonPatch />
+      <Rectangle />
+      <Triangle />
+    </patches>
+  </Surface>
+  <OrientableSurface type="22">
+    <baseSurface type="62">
+      <CompositeSurface />
+      <OrientableSurface />
+      <Surface />
+      <Polygon />
+      <TriangulatedSurface />
+      <Tin />
+    </baseSurface>
+  </OrientableSurface>
+  <TriangulatedSurface type="22">
+    <patches type="72">
+      <PolygonPatch />
+      <Rectangle />
+      <Triangle />
+    </patches>
+    <trianglePatches type="72">
+      <Triangle />
+    </trianglePatches>
+  </TriangulatedSurface>
+  <Tin type="22">
+    <patches type="72">
+      <PolygonPatch />
+      <Rectangle />
+      <Triangle />
+    </patches>
+    <trianglePatches type="72">
+      <Triangle />
+    </trianglePatches>
+    <maxLength type="99" />
+    <breakLines type="72">
+      <LineStringSegment />
+    </breakLines>
+    <stopLines type="72">
+      <LineStringSegment />
+    </stopLines>
+  </Tin>
+  <MultiPolygon type="20">
+    <polygonMember type="62">
+      <Polygon />
+    </polygonMember>
+  </MultiPolygon>
+  <Polygon type="22">
+    <exterior type="70">
+      <LinearRing />
+      <Ring />
+    </exterior>
+    <interior type="70">
+      <LinearRing />
+      <Ring />
+    </interior>
+  </Polygon>
+  <CompositeCurve type="23">
+    <curveMember type="63">
+      <CompositeCurve />
+      <OrientableCurve />
+      <Curve />
+      <LineString />
+    </curveMember>
+  </CompositeCurve>
+  <Curve type="23">
+    <segments type="73">
+      <LineStringSegment />
+    </segments>
+  </Curve>
+  <LineString type="23">
+    <posList type="98" />
+    <coordinates type="98" />
+  </LineString>
+  <OrientableCurve type="23">
+    <baseCurve type="63">
+      <CompositeCurve />
+      <OrientableCurve />
+      <Curve />
+      <LineString />
+    </baseCurve>
+  </OrientableCurve>
+  <PolygonPatch type="32">
+    <exterior type="70">
+      <LinearRing />
+      <Ring />
+    </exterior>
+    <interior type="70">
+      <LinearRing />
+      <Ring />
+    </interior>
+  </PolygonPatch>
+  <Rectangle type="32">
+    <exterior type="70">
+      <LinearRing />
+      <Ring />
+    </exterior>
+  </Rectangle>
+  <Triangle type="32">
+    <exterior type="70">
+      <LinearRing />
+      <Ring />
+    </exterior>
+  </Triangle>
+  <Ring type="30">
+    <curveMember type="73">
+      <LineStringSegment />
+    </curveMember>
+  </Ring>
+  <LinearRing type="30">
+    <pos type="98" />
+    <posList type="98" />
+    <coordinates type="98" />
+    <coord type="98">
+      <X type="99" />
+      <Y type="99" />
+      <Z type="99" />
+    </coord>
+    <pointRep type="80">
+      <Point />
+    </pointRep>
+  </LinearRing>
+  <LineStringSegment type="33">
+    <numDerivativesAtStart type="99" />
+    <numDerivativesAtEnd type="99" />
+    <numDerivativesAtInterior type="99" />
+    <interpolation type="99" />
+    <pos type="98" />
+    <posList type="98" />
+    <coordinates type="98" />
+    <coord type="98">
+      <X type="99" />
+      <Y type="99" />
+      <Z type="99" />
+    </coord>
+  </LineStringSegment>
+  <Point type="90">
+    <pos type="98" />
+    <posList type="98" />
+    <coordinates type="98" />
+    <coord type="98">
+      <X type="99" />
+      <Y type="99" />
+      <Z type="99" />
+    </coord>
+  </Point>
+  <pos type="98" />
+  <posList type="98" />
+  <coordinates type="98" />
+  <coord type="98">
+    <X type="99" />
+    <Y type="99" />
+    <Z type="99" />
+  </coord>
+  <CityModel type="10">
+    <description type="99" />
+    <name type="99" />
+    <boundedBy type="60">
+      <Envelope />
+    </boundedBy>
+    <cityObjectMember type="50">
+      <Building />
+      <LandUse />
+    </cityObjectMember>
+  </CityModel>
+  <Building type="10">
+    <name type="99" />
+    <creationDate type="99" />
+    <externalReference type="99">
+      <informationSystem type="99" />
+      <externalObject type="99">
+        <name type="99" />
+      </externalObject>
+    </externalReference>
+    <yearOfConstruction type="99" />
+    <measuredHeight type="99" />
+    <storeysAboveGround type="99" />
+    <lod2Solid type="60">
+      <Solid />
+    </lod2Solid>
+    <storeysBelowGround type="99" />
+    <boundedBy type="60">
+      <Envelope />
+      <WallSurface />
+      <RoofSurface />
+      <GroundSurface />
+    </boundedBy>
+    <stringAttribute type="99">
+      <value type="99" />
+    </stringAttribute>
+    <outerBuildingInstallation type="50">
+      <BuildingInstallation />
+    </outerBuildingInstallation>
+    <address type="99">
+      <Address type="99">
+        <xalAddress type="99">
+          <AddressDetails type="99">
+            <Country type="99">
+              <CountryName type="99" />
+              <Locality type="99">
+                <LocalityName type="99" />
+                <Thoroughfare type="99">
+                  <ThoroughfareNumber type="99" />
+                  <ThoroughfareName type="99" />
+                </Thoroughfare>
+                <PostalCode type="99">
+                  <PostalCodeNumber type="99" />
+                </PostalCode>
+              </Locality>
+            </Country>
+          </AddressDetails>
+        </xalAddress>
+      </Address>
+    </address>
+  </Building>
+  <LandUse type="10">
+    <name type="99" />
+    <lod2MultiSurface type="60">
+      <MultiSurface />
+    </lod2MultiSurface>
+  </LandUse>
+  <TexturedSurface type="22">
+    <baseSurface type="62">
+      <Polygon />
+    </baseSurface>
+    <appearance type="99">
+      <SimpleTexture type="99">
+        <textureMap type="99" />
+        <textureCoordinates type="99" />
+      </SimpleTexture>
+    </appearance>
+  </TexturedSurface>
+  <ImpliciteGeometry type="20" />
+  <Appearance type="10">
+    <theme type="99" />
+    <surfaceDataMember type="50">
+      <X3DMaterial />
+      <GeoreferencedTexture />
+      <ParameterizedTexture />
+    </surfaceDataMember>
+  </Appearance>
+  <GeoreferencedTexture type="10">
+    <imageURI type="99" />
+    <wrapMode type="99" />
+    <referencePoint type="70">
+      <Point />
+    </referencePoint>
+    <orientation type="99" />
+    <target type="99" />
+  </GeoreferencedTexture>
+  <X3DMaterial type="10">
+    <diffuseColor type="99" />
+    <target type="99" />
+  </X3DMaterial>
+  <ParameterizedTexture type="10">
+    <imageURI type="99" />
+    <wrapMode type="99" />
+    <target type="99">
+      <TexCoordList type="99">
+        <textureCoordinates type="99" />
+      </TexCoordList>
+      <TexCoordGen type="99">
+        <worldToTexture type="99" />
+      </TexCoordGen>
+    </target>
+  </ParameterizedTexture>
+  <WallSurface type="10">
+    <boundedBy type="60">
+      <Envelope />
+    </boundedBy>
+    <creationDate type="99" />
+    <stringAttribute type="99">
+      <value type="99" />
+    </stringAttribute>
+    <lod3MultiSurface type="60">
+      <MultiSurface />
+    </lod3MultiSurface>
+    <opening type="60">
+      <Window />
+      <Door />
+    </opening>
+    <lod2MultiSurface type="60">
+      <MultiSurface />
+    </lod2MultiSurface>
+  </WallSurface>
+  <Window type="10">
+    <creationDate type="99" />
+    <stringAttribute type="99">
+      <value type="99" />
+    </stringAttribute>
+    <lod3MultiSurface type="60">
+      <MultiSurface />
+    </lod3MultiSurface>
+  </Window>
+  <Door type="10">
+    <creationDate type="99" />
+    <stringAttribute type="99">
+      <value type="99" />
+    </stringAttribute>
+    <lod3MultiSurface type="60">
+      <MultiSurface />
+    </lod3MultiSurface>
+  </Door>
+  <RoofSurface type="10">
+    <boundedBy type="60">
+      <Envelope />
+    </boundedBy>
+    <creationDate type="99" />
+    <stringAttribute type="99">
+      <value type="99" />
+    </stringAttribute>
+    <lod3MultiSurface type="60">
+      <MultiSurface />
+    </lod3MultiSurface>
+    <lod2MultiSurface type="60">
+      <MultiSurface />
+    </lod2MultiSurface>
+  </RoofSurface>
+  <GroundSurface type="10">
+    <boundedBy type="60">
+      <Envelope />
+    </boundedBy>
+    <creationDate type="99" />
+    <stringAttribute type="99">
+      <value type="99" />
+    </stringAttribute>
+    <lod3MultiSurface type="60">
+      <MultiSurface />
+    </lod3MultiSurface>
+    <lod2MultiSurface type="60">
+      <MultiSurface />
+    </lod2MultiSurface>
+  </GroundSurface>
+  <BuildingInstallation type="10">
+    <boundedBy type="60">
+      <Envelope />
+    </boundedBy>
+    <creationDate type="99" />
+    <stringAttribute type="99">
+      <value type="99" />
+    </stringAttribute>
+    <lod4Geometry type="60">
+      <MultiSurface />
+    </lod4Geometry>
+  </BuildingInstallation>
+  <ImplicitGeometry type="20">
+    <mimeType type="99" />
+    <libraryObject type="99" />
+    <referencePoint type="70">
+      <Point />
+    </referencePoint>
+  </ImplicitGeometry>
+  <WaterSurface type="10">
+    <boundedBy type="60">
+      <Envelope />
+    </boundedBy>
+    <creationDate type="99" />
+    <lod3Surface type="62">
+      <CompositeSurface />
+    </lod3Surface>
+  </WaterSurface>
+</RegistryRoot>
+
