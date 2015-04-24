@@ -21,7 +21,7 @@ import org.citygml4j.util.walker.GMLWalker;
 import org.citygml4j.xml.io.CityGMLInputFactory;
 import org.citygml4j.xml.io.reader.CityGMLReader;
 
-public class Building {
+public class Buildings {
 	private String id;
 	private String description;
 	private double measuredHeightMeters;
@@ -31,7 +31,7 @@ public class Building {
 	private List<List<double[]>> wallPolygons;
 	private List<List<double[]>> roofPolygons;
 	
-	public Building(){
+	public Buildings(){
 		id = "";
 		description = "";
 		measuredHeightMeters = 0;
