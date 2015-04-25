@@ -23,5 +23,17 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="/home/vishal/worldwind-2.0.0/worldwindx.jar"/>
+	<classpathentry kind="lib" path="/home/vishal/Downloads/citygml4j-2.1.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="file:/home/vishal/software/citygml4j/citygml4j-2.1-javadoc/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/home/vishal/software/citygml4j/lib/xsom.jar"/>
+	<classpathentry kind="lib" path="/home/vishal/software/citygml4j/lib/woodstox-core-lgpl-4.4.1.jar"/>
+	<classpathentry kind="lib" path="/home/vishal/software/citygml4j/lib/stax2-api-3.1.4.jar"/>
+	<classpathentry kind="lib" path="/home/vishal/software/citygml4j/lib/relaxngDatatype.jar"/>
+	<classpathentry kind="lib" path="/home/vishal/software/Aristoteles-V1.3.02rc02_Signed/core/aristoteles.jar"/>
+	<classpathentry kind="lib" path="/home/vishal/software/proj4j.jar"/>
+	<classpathentry kind="lib" path="/home/vishal/software/swing-worker-1.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
