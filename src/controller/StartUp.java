@@ -2,7 +2,7 @@ package controller;
 
 import java.util.List;
 
-import citygmlModel.Building;
+import citygmlModel.Buildings;
 import render.AppFrame.RenderFrame;
 import gov.nasa.worldwind.Configuration;
 import gov.nasa.worldwind.avlist.AVKey;
@@ -13,8 +13,8 @@ public class StartUp {
 	public static void main(String argv[]){
 		
 		//Modeling the data
-		String filePath = "/home/vishal/NWW/sampleData/LOD2_Buildings_v100.gml";
-		Building building = new Building();
+		//String filePath = "/home/vishal/NWW/sampleData/LOD2_Buildings_v100.gml";
+		/*Buildings building = new Buildings();
 		try {
 			building.IterateGMLFile(filePath);
 			//print the Footprint
@@ -46,11 +46,11 @@ public class StartUp {
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("OOPS! Something went wrong in extracting from citygml file");
-		}
+		}*/
 		//Rendering the data
-		Configuration.setValue(AVKey.INITIAL_LATITUDE, 54);
-        Configuration.setValue(AVKey.INITIAL_LONGITUDE, 13);
-        Configuration.setValue(AVKey.INITIAL_ALTITUDE, 190e4);
+		Configuration.setValue(AVKey.INITIAL_LATITUDE, 76.51134570525976);
+        Configuration.setValue(AVKey.INITIAL_LONGITUDE, 9.019376924014613e-5);
+        Configuration.setValue(AVKey.INITIAL_ALTITUDE, 10);
         ApplicationTemplate.start("Getting Started with NASA World Wind", RenderFrame.class);
 	}
 }
