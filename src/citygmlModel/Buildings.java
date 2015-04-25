@@ -27,9 +27,12 @@ public class Buildings {
 	private double measuredHeightMeters;
 	private int storiesAboveGround;
 	private int storiesBelowGround;
-	private List<double[]> surfacePolygon;
-	private List<List<double[]>> wallPolygons;
-	private List<List<double[]>> roofPolygons;
+	private List<BuildingGroundSurfacePolygon> surfacePolygons;
+	private List<BuildingWallSurfacePolygons> listBuildingWalls;
+	private List<BuildingRoofPolygons> listroofPolygons;
+	
+	public static List<List<double[]>> wallsPolygon;
+	public static List<List<double[]>> roofPolygons;
 	
 	public Buildings(){
 		id = "";
@@ -37,9 +40,12 @@ public class Buildings {
 		measuredHeightMeters = 0;
 		storiesAboveGround = 0;
 		storiesBelowGround = 0;
-		surfacePolygon = new ArrayList<double[]>();
-		wallPolygons = new ArrayList<List<double[]>>();
+		surfacePolygons = new ArrayList<BuildingGroundSurfacePolygon>();
+		listBuildingWalls = new ArrayList<BuildingWallSurfacePolygons>();
+		listroofPolygons = new ArrayList<BuildingRoofPolygons>();
+		
 		roofPolygons = new ArrayList<List<double[]>>();
+		wallsPolygon = new ArrayList<List<double[]>>();
 	}
 	public void IterateGMLFile(String filePath) throws Exception{
 		CityGMLContext ctx = new CityGMLContext();
@@ -68,16 +74,19 @@ public class Buildings {
 								GMLWalker footPolygonWalker = new GMLWalker(){
 									public void visit(LinearRing linearRing)
 									{
-										System.out.println("inside the linearRing visitor");
 										if(linearRing.isSetPosList()){
 											DirectPositionList posList = linearRing.getPosList();
 											List<Double> points = posList.toList3d();
-											
+											BuildingGroundSurfacePolygon buildingSurfacePolygon = new BuildingGroundSurfacePolygon();
+											List<double[]> polygonfloor = new ArrayList<double[]>();
 											for(int i=0 ; i<points.size() ;i+=3){
 												double[] vals = new double[]{points.get(i) , points.get(i+1),points.get(i+2)};
 												//System.out.println(vals[0]+" "+vals[1]+" "+vals[2]);
-												surfacePolygon.add(vals);
+												polygonfloor.add(vals);
 											}
+											
+											buildingSurfacePolygon.setSurfacePolygon(polygonfloor);
+											surfacePolygons.add(buildingSurfacePolygon);
 										}
 									}
 								};
@@ -85,35 +94,67 @@ public class Buildings {
 							}
 						};
 						//Visit the WallSurface to get its geometry
+						System.out.println("BuildingId "+building.getId());
 						FeatureWalker wallWalker = new FeatureWalker(){
 							public void visit(WallSurface wallSurface){
 								//Get the geometry of the walls
-								GMLWalker wallWalk = new GMLWalker(){
+								BuildingWallSurfacePolygons buildingWallSurfacepolygons = new BuildingWallSurfacePolygons();
+								//wallsPolygon = new ArrayList<List<double[]>>();
+								System.out.println("wallID"+wallSurface.getId());
+								wallsPolygon = new ArrayList<List<double[]>>();
+								GMLWalker wallWalk = new GMLWalker(){	
 									public void visit(LinearRing linearRing){
+										
+										System.out.println("inside the linearRing visitor");
+										
 										DirectPositionList posList = linearRing.getPosList();
 										List<Double> points = posList.toList3d();
+										
 										List<double[]> wallPolygon = new ArrayList<double[]>();
+										
 										for(int i=0 ; i<points.size() ;i+=3){
 											double[] vals = new double[]{points.get(i) , points.get(i+1),points.get(i+2)};
 											//System.out.println(vals[0]+" "+vals[1]+" "+vals[2]);
 											wallPolygon.add(vals);
 										}
-										wallPolygons.add(wallPolygon);
+										
+										//System.out.println(wallPolygon.size());
+										wallsPolygon.add(wallPolygon);
+										
+										//System.out.println(wallsPolygon.size());
+										/*for(int i=0 ; i<wallPolygon.size(); i++){
+											List<double[]> a = wallsPolygon.get(i);
+											for(int j=0 ; j<a.size() ; j++){
+												double[] b = a.get(j);
+												System.out.println(b[0]+" "+b[1]+" "+b[2]);
+											}
+											System.out.println();
+										}*/
+										//System.out.println(wallsPolygon.get(wallsPolygon.size()-1)+"\n");
 									}
 								};
 								wallSurface.accept(wallWalk);
+								//TODO::If this is outside, then it might probably work:
+								buildingWallSurfacepolygons.setWallPolygons(wallsPolygon);
+								//wallsPolygon.clear();
+								listBuildingWalls.add(buildingWallSurfacepolygons);
+								//System.out.println("Number of buildings"+listBuildingWalls.size());
 							}
 						};
 						//Visit roofSurface to get its geometry:
 						FeatureWalker roofWalker = new FeatureWalker(){
 							public void visit(RoofSurface roofSurface){
 								//Get the geometry of the roof
+								BuildingRoofPolygons buildingRoofPolygons = new BuildingRoofPolygons();
 								GMLWalker roofWalk = new GMLWalker(){
 									public void visit(LinearRing linearRing){
 										DirectPositionList posList = linearRing.getPosList();
 										List<Double> points = posList.toList3d();
 										
+										
 										List<double[]> roofPolygon = new ArrayList<double[]>();
+										roofPolygons = new ArrayList<List<double[]>>();
+										
 										for(int i=0 ; i<points.size() ;i+=3){
 											double[] vals = new double[]{points.get(i) , points.get(i+1),points.get(i+2)};
 											//System.out.println(vals[0]+" "+vals[1]+" "+vals[2]);
@@ -123,6 +164,8 @@ public class Buildings {
 									}
 								};
 								roofSurface.accept(roofWalk);
+								buildingRoofPolygons.setRoofPolygon(roofPolygons);
+								listroofPolygons.add(buildingRoofPolygons);
 							}
 						};
 						building.accept(surfacewalker);
@@ -178,23 +221,23 @@ public class Buildings {
 	public void setStoriesBelowGround(int storiesBelowGround) {
 		this.storiesBelowGround = storiesBelowGround;
 	}
-	public List<double[]> getSurfacePolygon() {
-		return surfacePolygon;
+	public List<BuildingGroundSurfacePolygon> getSurfacePolygons() {
+		return surfacePolygons;
 	}
-	public void setSurfacePolygon(List<double[]> surfacePolygon) {
-		this.surfacePolygon = surfacePolygon;
+	public void setSurfacePolygons(List<BuildingGroundSurfacePolygon> surfacePolygon) {
+		this.surfacePolygons = surfacePolygon;
 	}
-	public List<List<double[]>> getWallPolygons() {
-		return wallPolygons;
+	public List<BuildingWallSurfacePolygons> getWallPolygons() {
+		return listBuildingWalls;
 	}
-	public void setWallPolygons(List<List<double[]>> wallPolygons) {
-		this.wallPolygons = wallPolygons;
+	public void setWallPolygons(List<BuildingWallSurfacePolygons> wallPolygons) {
+		this.listBuildingWalls = wallPolygons;
 	}
-	public List<List<double[]>> getRoofPolygons() {
-		return roofPolygons;
+	public List<BuildingRoofPolygons> getRoofPolygons() {
+		return listroofPolygons;
 	}
-	public void setRoofPolygons(List<List<double[]>> roofPolygons) {
-		this.roofPolygons = roofPolygons;
+	public void setRoofPolygons(List<BuildingRoofPolygons> roofPolygons) {
+		this.listroofPolygons = roofPolygons;
 	}
 	public void setMeasuredHeightMeters(double measuredHeightMeters) {
 		this.measuredHeightMeters = measuredHeightMeters;
