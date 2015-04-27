@@ -13,8 +13,11 @@ import org.citygml4j.model.citygml.building.GroundSurface;
 import org.citygml4j.model.citygml.building.RoofSurface;
 import org.citygml4j.model.citygml.building.WallSurface;
 import org.citygml4j.model.citygml.core.CityModel;
+import org.citygml4j.model.gml.geometry.primitives.Coord;
+import org.citygml4j.model.gml.geometry.primitives.DirectPosition;
 import org.citygml4j.model.gml.geometry.primitives.DirectPositionList;
 import org.citygml4j.model.gml.geometry.primitives.LinearRing;
+import org.citygml4j.model.gml.geometry.primitives.PosOrPointPropertyOrPointRep;
 import org.citygml4j.model.gml.geometry.primitives.Solid;
 import org.citygml4j.util.walker.FeatureWalker;
 import org.citygml4j.util.walker.GMLWalker;
@@ -151,6 +154,7 @@ public class MultipleBuildingsFileClass {
 							
 						}*/
 						visitMethod(linearRing);
+						//VisitMethod2(linearRing);
 					}
 				};
 				groundSurface.accept(gmlWalker);
@@ -223,6 +227,39 @@ public class MultipleBuildingsFileClass {
 			
 			//surfacePolygons.add(buildingSurfacePolygon);
 		}
+		else{
+			
+			List<PosOrPointPropertyOrPointRep> posList = linearRing.getPosOrPointPropertyOrPointRep();
+			for(PosOrPointPropertyOrPointRep position : posList){
+				DirectPosition pos = position.getPos();
+				List<Double> points = pos.getValue();
+				
+				List<CoordinateClass> polygonfloor = new ArrayList<CoordinateClass>();
+				PolygonClass poly = new PolygonClass();
+				for(int i=0 ; i<points.size() ;i+=3){
+					double[] vals = new double[]{points.get(i) , points.get(i+1),points.get(i+2)};
+					//System.out.println(vals[0]+" "+vals[1]+" "+vals[2]);
+					
+					CoordinateClass coord = new CoordinateClass(vals);
+					polygonfloor.add(coord);
+				}
+				poly.setPolygon(polygonfloor);
+				
+				surfaceMember.setPolygon(poly);
+				if(this.typeFlag=="groundSurface")
+					surfaceMemberList.add(surfaceMember);
+				else if(this.typeFlag=="walls")
+					wallList.add(surfaceMember);
+				else if(this.typeFlag=="roofs")
+					roofList.add(surfaceMember);
+				surfaceMember = new SurfaceMember();
+				
+			}
+			//System.out.println("Its not a PosList :(");
+		}
+	}
+	private void visitMethod2(LinearRing linearRing){
+		
 	}
 
 	public List<BuildingsClass> getBuildingsList() {
