@@ -40,7 +40,7 @@ public class RenderingBuildingSurface {
 			ArrayList<Position> surfacePositions = new ArrayList<Position>();
 			for(int j=0 ; j<polygons.size() ; j++){
 				double[] polygon = polygons.get(j);
-				convert.convertCoordinate("not using", "not using", polygon);
+				polygon = convert.convertCoordinate("not using", "not using", polygon);
 
 				//System.out.println(polygon[0]+" "+polygon[1]+" "+polygon[2]);
 				surfacePositions.add(Position.fromDegrees(polygon[0], polygon[1], polygon[2]));

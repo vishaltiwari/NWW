@@ -1,8 +1,14 @@
 package render;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import citygmlModel.BuildingsClass;
 import citygmlModel.Buildings;
+import citygmlModel.CoordinateClass;
+import citygmlModel.MultipleBuildingsFileClass;
+import citygmlModel.PolygonClass;
+import citygmlModel.SurfaceMember;
 import gov.nasa.worldwind.WorldWind;
 import gov.nasa.worldwind.avlist.AVKey;
 import gov.nasa.worldwind.geom.Position;
@@ -57,7 +63,25 @@ public class AppFrame extends ApplicationTemplate {
             
             //Create the Buildings Layer
             String filePath = "/home/vishal/NWW/sampleData/LOD2_Buildings_v100.gml";
-            Buildings buildings = new Buildings();
+            MultipleBuildingsFileClass obj = new MultipleBuildingsFileClass();
+            
+            //RenderingBuildingSurface
+            try {
+    			obj.IterateGMLFile(filePath);
+    			List<BuildingsClass> buildingsList = obj.getBuildingsList();
+    			//Each element in BuildingList is a new citygml file, so each will be a separate layer:
+    			for(BuildingsClass building : buildingsList){
+    				RenderObjects renderFile = new RenderObjects();
+    				RenderableLayer buildingsLayer = renderFile.startRenderingBuildings(building);
+    				insertBeforeCompass(getWwd(),buildingsLayer);
+    			}
+    			
+    			
+    		} catch (Exception e) {
+    			// TODO Auto-generated catch block
+    			e.printStackTrace();
+    		}
+            /*Buildings buildings = new Buildings();
             
             try {
 				buildings.IterateGMLFile(filePath);
@@ -80,7 +104,7 @@ public class AppFrame extends ApplicationTemplate {
             //Render roof surface
             RenderBuildingRoofs roofRenderer = new RenderBuildingRoofs();
             RenderableLayer roofsLayer = roofRenderer.renderRoofs(buildings);
-            insertBeforeCompass(getWwd(),roofsLayer);
+            insertBeforeCompass(getWwd(),roofsLayer);*/
             
             //update the layer panel
             //this.getLayerPanel().update(this.getWwd());

@@ -43,7 +43,7 @@ public class RenderingBuildingWalls {
 				System.out.println("Coordinates are as follows:");
 				for(int k=0 ; k<wall.size() ; k++){
 					double[] coordinate = wall.get(k);
-					convert.convertCoordinate("not using", "not using", coordinate);
+					coordinate = convert.convertCoordinate("not using", "not using", coordinate);
 					System.out.println(coordinate[0]+" "+coordinate[1]+" "+coordinate[2]);
 					wallPositions.add(Position.fromDegrees(coordinate[0], coordinate[1], coordinate[2]));
 				}

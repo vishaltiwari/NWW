@@ -46,7 +46,7 @@ public class RenderBuildingRoofs {
 				System.out.println("Coordinates are as follows:");
 				for(int k=0 ; k<roof.size() ; k++){
 					double[] coordinate = roof.get(k);
-					convert.convertCoordinate("not using", "not using", coordinate);
+					coordinate = convert.convertCoordinate("not using", "not using", coordinate);
 					//System.out.println(coordinate[0]+" "+coordinate[1]+" "+coordinate[2]);
 					roofPositions.add(Position.fromDegrees(coordinate[0], coordinate[1], coordinate[2]));
 				}
