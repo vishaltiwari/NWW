@@ -19,6 +19,7 @@ import org.citygml4j.model.gml.geometry.primitives.DirectPositionList;
 import org.citygml4j.model.gml.geometry.primitives.LinearRing;
 import org.citygml4j.model.gml.geometry.primitives.PosOrPointPropertyOrPointRep;
 import org.citygml4j.model.gml.geometry.primitives.Solid;
+import org.citygml4j.model.gml.geometry.primitives.SurfaceProperty;
 import org.citygml4j.util.walker.FeatureWalker;
 import org.citygml4j.util.walker.GMLWalker;
 import org.citygml4j.xml.io.CityGMLInputFactory;
@@ -30,7 +31,7 @@ public class MultipleBuildingsFileClass {
 	List<SurfaceMember> surfaceMemberList = new ArrayList<SurfaceMember>();
 	List<SurfaceMember> wallList = new ArrayList<SurfaceMember>();
 	List<SurfaceMember> roofList = new ArrayList<SurfaceMember>();
-	
+	List<SurfaceMember> solidList = new ArrayList<SurfaceMember>();
 	String typeFlag;
 	
 
@@ -68,6 +69,11 @@ public class MultipleBuildingsFileClass {
 					this.typeFlag="roofs";
 					FeatureWalker roofWalker = IterateRoof(building);
 					cityModel.accept(roofWalker);
+					
+					this.typeFlag="solid";
+					FeatureWalker solidWalker = IterateSolid(building);
+					cityModel.accept(solidWalker);
+					
 					this.buildingsList.add(building);
 					
 				}
@@ -200,6 +206,29 @@ public class MultipleBuildingsFileClass {
 		return roofWalker;
 	}
 	
+	private FeatureWalker IterateSolid(BuildingsClass singleBuilding){
+		FeatureWalker solidWalker = new FeatureWalker(){
+			
+			public void visit(Building building){
+				GMLWalker Walker = new GMLWalker(){
+					public void visit(Solid solid){
+						if(solid.isSetExterior()){
+							GMLWalker gmlWalker = new GMLWalker(){
+								public void visit(LinearRing linearRing){
+									visitMethod(linearRing);
+								}
+							};
+							solid.accept(gmlWalker);
+						}
+					}
+				};
+				building.accept(Walker);
+			}
+		};
+		singleBuilding.setSolid(solidList);
+		return solidWalker;
+	}
+	
 	private void visitMethod(LinearRing linearRing){
 		if(linearRing.isSetPosList()){
 			DirectPositionList posList = linearRing.getPosList();
@@ -222,6 +251,8 @@ public class MultipleBuildingsFileClass {
 				wallList.add(surfaceMember);
 			else if(this.typeFlag=="roofs")
 				roofList.add(surfaceMember);
+			else if(this.typeFlag=="solid")
+				solidList.add(surfaceMember);
 			surfaceMember = new SurfaceMember();
 			//singleBuilding.setSurfacePolygon(surfaceMember);
 			
