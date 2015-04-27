@@ -54,9 +54,10 @@ public class RenderObjects {
 			ArrayList<Position> Positions = new ArrayList<Position>();
 			for(CoordinateClass coord : coords){
 				//System.out.println("Inside the coords class");
-				double[] arr = convert.convertCoordinate("something", "crap", coord.getCoords());
+				double[] arr = convert.convertCoordinate("+proj=utm +zone=45 +ellps=WGS72 +towgs84=0,0,4.5,0,0,0.554,0.2263 +units=m +no_defs", "WGS84", coord.getCoords());
 			//	System.out.println(arr[0]+" "+arr[1]+" "+arr[2]);
-				Positions.add(Position.fromDegrees(arr[0],arr[1],arr[2]));
+				Positions.add(Position.fromDegrees(arr[1],arr[0],arr[2]));
+				
 			}
 			Polygon poly = new Polygon(Positions);
 			poly.setAttributes(normalAttributes);
@@ -81,9 +82,9 @@ public class RenderObjects {
 			List<CoordinateClass> coords = polygon.getPolygon();
 			ArrayList<Position> Positions = new ArrayList<Position>();
 			for(CoordinateClass coord : coords){
-				double[] arr = convert.convertCoordinate("something", "crap", coord.getCoords());
+				double[] arr = convert.convertCoordinate("+proj=utm +zone=45 +ellps=WGS72 +towgs84=0,0,4.5,0,0,0.554,0.2263 +units=m +no_defs", "WGS84", coord.getCoords());
 		//		System.out.println(arr[0]+" "+arr[1]+" "+arr[2]);
-				Positions.add(Position.fromDegrees(arr[0],arr[1],arr[2]));
+				Positions.add(Position.fromDegrees(arr[1],arr[0],arr[2]));
 			}
 			Polygon poly = new Polygon(Positions);
 			poly.setAttributes(normalAttributes);
@@ -107,9 +108,9 @@ public class RenderObjects {
 			List<CoordinateClass> coords = polygon.getPolygon();
 			ArrayList<Position> Positions = new ArrayList<Position>();
 			for(CoordinateClass coord : coords){
-				double[] arr = convert.convertCoordinate("something", "crap", coord.getCoords());
+				double[] arr = convert.convertCoordinate("+proj=utm +zone=45 +ellps=WGS72 +towgs84=0,0,4.5,0,0,0.554,0.2263 +units=m +no_defs", "WGS84", coord.getCoords());
 				System.out.println(arr[0]+" "+arr[1]+" "+arr[2]);
-				Positions.add(Position.fromDegrees(arr[0],arr[1],arr[2]));
+				Positions.add(Position.fromDegrees(arr[1],arr[0],arr[2]));
 			}
 			Polygon poly = new Polygon(Positions);
 			poly.setAttributes(normalAttributes);

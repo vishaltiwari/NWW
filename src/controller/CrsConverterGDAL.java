@@ -9,8 +9,10 @@ public class CrsConverterGDAL {
 		SpatialReference oLatLog = new SpatialReference();
 		
 		oUTM.SetProjCS("UTM 44/ WGS84");
-		oUTM.SetWellKnownGeogCS("WGS84");
-		oUTM.SetUTM(44, 1);
+		oUTM.SetWellKnownGeogCS(desProj);
+		//oUTM.ImportFromProj4(srcProj);
+		//oUTM.ImportFromEPSG(32245);
+		oUTM.SetUTM(44);
 		
 		oLatLog = oUTM.CloneGeogCS();
 		
@@ -22,5 +24,17 @@ public class CrsConverterGDAL {
 		
 		return coords;
 		//System.out.println("Before:"+x+" "+y+"\nAfter:"+coordinate[0]+" "+coordinate[1]);
+	}
+	public static void main(String argv[]){
+		CrsConverterGDAL obj = new CrsConverterGDAL();
+		double[] coord = new double[3];
+		coord[0] = 10;
+		coord[1] = 20;
+		coord[2] = 10;
+		
+		double x=coord[0] , y=coord[1] , z=coord[2];
+		coord = obj.convertCoordinate("+proj=utm +zone=45 +ellps=WGS72 +towgs84=0,0,4.5,0,0,0.554,0.2263 +units=m +no_defs", "WGS84", coord);
+		
+		System.out.println(x+" "+y+" "+z+"\n"+coord[0]+" "+coord[1]+" "+coord[2]);
 	}
 }
