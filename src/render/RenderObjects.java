@@ -30,10 +30,16 @@ public class RenderObjects {
 		List<SurfaceMember> surfaceList = buildings.getSurfacePolygon();
 		List<SurfaceMember> walls = buildings.getWalls();
 		List<SurfaceMember> roofs = buildings.getRoofs();
-
-		renderGroundSurface(surfaceList,layer);
-		renderWalls(walls,layer);
-		renderRoofs(roofs,layer);
+		List<SurfaceMember> solids = buildings.getSolid();
+		
+		if(surfaceList.size() > 0)
+			renderGroundSurface(surfaceList,layer);
+		if(walls.size() > 0)
+			renderWalls(walls,layer);
+		if(roofs.size() > 0)
+			renderRoofs(roofs,layer);
+		if(solids.size() > 0)
+			renderSolids(solids,layer);
 
 		return layer;
 	}
@@ -120,6 +126,34 @@ public class RenderObjects {
 			poly.setAltitudeMode(WorldWind.RELATIVE_TO_GROUND);
 			layer.addRenderable(poly);
 		}
+	}
+	private void renderSolids(List<SurfaceMember> solids,RenderableLayer layer){
+		System.out.println("Rendering Solids");
+		
+		ShapeAttributes normalAttributes = new BasicShapeAttributes();
+        
+        normalAttributes.setInteriorMaterial(Material.RED);
+        normalAttributes.setOutlineWidth(2);
+        normalAttributes.setOutlineOpacity(0.5);
+        normalAttributes.setDrawInterior(true);
+        normalAttributes.setDrawInterior(true);
+        
+        for(SurfaceMember solid : solids){
+        	PolygonClass polygon = solid.getPolygon();
+        	List<CoordinateClass> coords = polygon.getPolygon();
+        	ArrayList<Position> Positions = new ArrayList<Position>();
+			for(CoordinateClass coord : coords){
+				double[] arr = convert.convertCoordinate("+proj=utm +zone=45 +ellps=WGS72 +towgs84=0,0,4.5,0,0,0.554,0.2263 +units=m +no_defs", "WGS84", coord.getCoords());
+				System.out.println(arr[0]+" "+arr[1]+" "+arr[2]);
+				Positions.add(Position.fromDegrees(arr[1],arr[0],arr[2]));
+			}
+			if(Positions.size() < 3) continue;
+			Polygon poly = new Polygon(Positions);
+			poly.setAttributes(normalAttributes);
+			poly.setAltitudeMode(WorldWind.RELATIVE_TO_GROUND);
+			layer.addRenderable(poly);
+        }
+        
 	}
 	
 	/*public RenderableLayer startRendering(List<SurfaceMember> surfaces){
