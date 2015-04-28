@@ -3,6 +3,7 @@ package render;
 import java.util.ArrayList;
 import java.util.List;
 
+import controller.StartUp;
 import citygmlModel.BuildingsClass;
 import citygmlModel.Buildings;
 import citygmlModel.CoordinateClass;
@@ -27,6 +28,7 @@ public class AppFrame extends ApplicationTemplate {
         {
             super(true, true, false);
 
+            
             //this.getWwd().addSelectListener(new BasicDragger(this.getWwd()));
             
             //create layer for a polygon
@@ -62,13 +64,14 @@ public class AppFrame extends ApplicationTemplate {
             insertBeforeCompass(getWwd(),layer);
             
             //Create the Buildings Layer
-            String filePath = "/home/vishal/NWW/sampleData/LOD2_Buildings_v100.gml";
-            MultipleBuildingsFileClass obj = new MultipleBuildingsFileClass();
+            //String filePath = "/home/vishal/NWW/sampleData/LOD2_Buildings_v100.gml";
+            //String filePath = "/home/vishal/NWW/sampleData/waldbruecke_v1.0.0.gml";
+            //MultipleBuildingsFileClass obj = new MultipleBuildingsFileClass();
             
             //RenderingBuildingSurface
             try {
-    			obj.IterateGMLFile(filePath);
-    			List<BuildingsClass> buildingsList = obj.getBuildingsList();
+    			//obj.IterateGMLFile(filePath);
+    			List<BuildingsClass> buildingsList = StartUp.obj.getBuildingsList();
     			//Each element in BuildingList is a new citygml file, so each will be a separate layer:
     			for(BuildingsClass building : buildingsList){
     				RenderObjects renderFile = new RenderObjects();
