@@ -2,6 +2,8 @@ package meshGenerator;
 
 import gov.nasa.worldwind.Configuration;
 import gov.nasa.worldwind.avlist.AVKey;
+import gov.nasa.worldwind.geom.Angle;
+import gov.nasa.worldwind.geom.Position;
 import gov.nasa.worldwind.layers.RenderableLayer;
 import gov.nasa.worldwindx.examples.ApplicationTemplate;
 
@@ -15,7 +17,23 @@ import meshGenerator.ExtractWaterSurfacePolygons.AppFrame;
 public class WaterMeshRender extends ApplicationTemplate{
 	
 	//Need to mofiy this for the DEM from WMS server
-	protected MeshSurfaceVBO CalculateWaterArea(MeshSurfaceVBO DSM,MeshSurfaceVBO floodMap){
+	//This class is only for representation, not to be used in income code. We won't draw buildings like this. 
+	/*protected MeshClass getBuildings(MeshClass terrain,MeshClass DSM){
+		int width = DSM.getWidth();
+		int height = DSM.getHeight();
+		
+		if(DSM.getHeight() != terrain.getHeight() || DSM.getWidth()!=terrain.getWidth()){
+			System.out.println("They have different dimensions");
+			return null;
+		}
+		
+		float[] buildingArea = new float[height*width];
+		
+		MeshClass buildings=null;
+		return buildings;
+	}*/
+	
+	protected MeshClass CalculateWaterArea(MeshClass DSM,MeshClass floodMap,float[] color,String tag){
 		
 		int width = DSM.getWidth();
 		int height = DSM.getHeight();
@@ -45,7 +63,10 @@ public class WaterMeshRender extends ApplicationTemplate{
 				for(int j=0 ; j<width ; j++){
 
 					if((floodMap.getHeight(i, j) - DSM.getHeight(i, j)) >0){
-						floodArea[cnt++] = floodMap.getHeight(i, j);
+						if(tag=="building")
+							floodArea[cnt++] = floodMap.getHeight(i, j)*2;
+						else
+							floodArea[cnt++] = floodMap.getHeight(i, j);
 					}
 					else{
 						floodArea[cnt++] = 0;
@@ -61,7 +82,8 @@ public class WaterMeshRender extends ApplicationTemplate{
 			e.printStackTrace();
 		}
 
-		MeshSurfaceVBO floodMesh = new MeshSurfaceVBO(floodArea,width,height);
+		
+		MeshClass floodMesh = new MeshClass(floodArea,width,height,floodMap.getPosition(),color);
 		System.out.println(floodMesh.getHeight());
 		return floodMesh;
 	}
@@ -74,16 +96,27 @@ public class WaterMeshRender extends ApplicationTemplate{
 
             RenderableLayer layer = new RenderableLayer();
             //Cube cube = new Cube(Position.fromDegrees(35.0, -120.0, 3000), 1000);
+            Position pos = new Position(Angle.fromDegrees(0),Angle.fromDegrees(0),100);
             String filename = "/home/vishal/NWW/sampleData/DSM.png";
-            MeshSurfaceVBO DSM = new MeshSurfaceVBO(filename);
-            MeshSurfaceVBO floodMap = new MeshSurfaceVBO("/home/vishal/NWW/sampleData/floodPolygon.png");
+            float[] DSMColor = {1,1,1};
+            float[] floodColor = {0,0,1};
+            float[] terrainColor = {0,1,0};
+            float[] buildingCoor = {0.5f,0.3f,0.0f};
+            MeshClass terrain = new MeshClass("/home/vishal/NWW/sampleData/Createdheightmap.png",pos,terrainColor);
+            
+            MeshClass DSM = new MeshClass(filename,pos,DSMColor);
+            MeshClass floodMap = new MeshClass("/home/vishal/NWW/sampleData/floodPolygon2.png",pos,floodColor);
             WaterMeshRender pol = new WaterMeshRender();
-            MeshSurfaceVBO floodarea = pol.CalculateWaterArea(DSM, floodMap);
+            
+            MeshClass buildings = pol.CalculateWaterArea(terrain, DSM,buildingCoor,"building");
+            MeshClass floodarea = pol.CalculateWaterArea(DSM, floodMap,floodMap.getColorArr(),"flood");
             System.out.println(floodarea.getWidth() + " "+floodarea.getHeight());
             
             System.out.println("coordCount "+floodarea.getCoordCount() + " indx count:"+floodarea.getIndexCount()+ " count");
-            layer.addRenderable(floodarea);
+            layer.addRenderable(buildings);
             layer.addRenderable(DSM);
+            layer.addRenderable(floodarea);
+            
             //pol.print(floodarea);
 
             getWwd().getModel().getLayers().add(layer);

@@ -75,16 +75,16 @@ public class MeshSurfaceVBO extends AbstractShape implements Renderable{
 	private int m_nVBOVertices;
 	
 	//TODO: Set the position from the filename/ projection system / input Position
-	public MeshSurfaceVBO(String filename){
+	public MeshSurfaceVBO(String filename,Position position){
 		//sets the width and height of the height map as well.
 		this.heightMap = loadHeightMap(filename);
 		this.Vertices = HeightMapToVertices();
 		this.index = CreateIndex();
 		//position where to put the watersurface geometry
-		this.position = new Position(Angle.fromDegrees(0),Angle.fromDegrees(0),100);
+		this.position = position;
 	}
 	
-	public MeshSurfaceVBO(float[] heightMap,int width,int height){
+	public MeshSurfaceVBO(float[] heightMap,int width,int height,Position position){
 		this.width = width;
 		this.height = height;
 		this.count = width*height;
@@ -93,7 +93,7 @@ public class MeshSurfaceVBO extends AbstractShape implements Renderable{
 		this.Vertices = HeightMapToVertices();
 		this.index = CreateIndex();
 		
-		this.position = new Position(Angle.fromDegrees(0),Angle.fromDegrees(0),100);
+		this.position = position;
 		
 	}
 
@@ -245,7 +245,9 @@ public class MeshSurfaceVBO extends AbstractShape implements Renderable{
 		GL2 gl = dc.getGL().getGL2();
 		
 		int attrMask = GL2.GL_CURRENT_BIT | GL.GL_COLOR_BUFFER_BIT;
+		
 	    gl.glPushAttrib(attrMask);
+	    
 	    
 	    if (!dc.isPickingMode())
 	        dc.beginStandardLighting();
@@ -277,13 +279,13 @@ public class MeshSurfaceVBO extends AbstractShape implements Renderable{
 		//Color not working
 		//data
 		//Vertex data
-		FloatBuffer vertexBuffer = GLBuffers.newDirectFloatBuffer(this.coordCount);
+		/*FloatBuffer vertexBuffer = GLBuffers.newDirectFloatBuffer(this.coordCount);
 		vertexBuffer.put(Vertices);
 		vertexBuffer.rewind();
 		
 		IntBuffer indexBuffer = GLBuffers.newDirectIntBuffer(this.indexCount);
 		indexBuffer.put(index);
-		indexBuffer.rewind();
+		indexBuffer.rewind();*/
 		//System.out.println("CoordCount"+coordCount+" indexCount"+indexCount);
 		/*float testArr[] = {0,0,100,  10,0,100,  20,0,100,  30,0,100,  40,0,100,   
 				           0,10,200, 10,10,200,  20,10,200,  30,10,200,  40,10,200,
@@ -302,7 +304,7 @@ public class MeshSurfaceVBO extends AbstractShape implements Renderable{
 		testIndxBuffer.put(testIndx);
 		testIndxBuffer.rewind();*/
 		
-		/*float f[] = {1000,2000,-4000,-2000,-2000,-4000,2000,-2000,-4000,1000,-4000,-4000};
+		float f[] = {1000,2000,-4000,-2000,-2000,-4000,2000,-2000,-4000,1000,-4000,-4000};
 		FloatBuffer buffer = GLBuffers.newDirectFloatBuffer(12);
 		this.coordCount = 12;
 		buffer.put(f);
@@ -313,9 +315,9 @@ public class MeshSurfaceVBO extends AbstractShape implements Renderable{
 		IntBuffer indxBuffer = GLBuffers.newDirectIntBuffer(6); //Total number of vertices
 		this.indexCount = 6;
 		indxBuffer.put(indx);
-		indxBuffer.rewind();*/
+		indxBuffer.rewind();
 		
-		float color[] = {1,0,1,0,0,0,0,0,0,1,0,0};
+		float color[] = {1,0,0,1,0,0,1,0,0,1,0,0};
 		FloatBuffer colorBuffer = GLBuffers.newDirectFloatBuffer(12);
 		colorBuffer.put(color);
 		colorBuffer.rewind();
@@ -337,20 +339,30 @@ public class MeshSurfaceVBO extends AbstractShape implements Renderable{
 		//gl.glBindBuffer(GL.GL_ARRAY_BUFFER, VBO[0]);
 		//gl.glBindBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, VBO[1]);
 		
+
+	    gl.glEnable(GL2.GL_COLOR_MATERIAL);
+		gl.glColorMaterial(GL2.GL_FRONT_AND_BACK, GL2.GL_DIFFUSE);
+		//gl.glColor3f(1,0,0);
+		
+		gl.glDisable(GL.GL_TEXTURE_2D);
+		//gl.glEnableClientState(GLPointerFunc.GL_COLOR_ARRAY);
 		gl.glEnableClientState(GLPointerFunc.GL_VERTEX_ARRAY);
+		gl.glFrontFace(GL.GL_CCW);
 		//gl.glEnableClientState(GLPointerFunc.GL_COLOR_ARRAY);
 		//gl.glVertexPointer(3, GL.GL_FLOAT, 0, 0);
 		
-		gl.glVertexPointer(3, GL.GL_FLOAT, 0, vertexBuffer);
-		
+		gl.glVertexPointer(3, GL.GL_FLOAT, 0, buffer);
 		//gl.glColorPointer(3, GL.GL_FLOAT, 0, colorBuffer);
+		
+		gl.glColorPointer(3, GL.GL_FLOAT, 0, colorBuffer);
 		
 		//gl.glDrawArrays(GL.GL_TRIANGLE_STRIP, 0, 4);
 		//gl.glDrawElements(GL.GL_TRIANGLES, this.indexCount, GL.GL_UNSIGNED_INT, 0);
-		gl.glDrawElements(GL.GL_TRIANGLES, this.indexCount, GL.GL_UNSIGNED_INT, indexBuffer);
+		gl.glDrawElements(GL.GL_TRIANGLES, this.indexCount, GL.GL_UNSIGNED_INT, indxBuffer);
 		
 		//gl.glDisableClientState(GLPointerFunc.GL_COLOR_ARRAY);
 		gl.glDisableClientState(GLPointerFunc.GL_VERTEX_ARRAY);
+		gl.glEnable(GL.GL_TEXTURE_2D);
 		//gl.glBindBuffer(GL.GL_ARRAY_BUFFER, 0);
 		//gl.glBindBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, 0);
 	}

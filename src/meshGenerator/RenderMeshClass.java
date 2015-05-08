@@ -10,7 +10,7 @@ import gov.nasa.worldwind.render.Material;
 import gov.nasa.worldwind.render.ShapeAttributes;
 import gov.nasa.worldwindx.examples.ApplicationTemplate;
 
-public class RenderMesh extends ApplicationTemplate{
+public class RenderMeshClass extends ApplicationTemplate {
 	protected static class AppFrame extends ApplicationTemplate.AppFrame
     {   
         public AppFrame()
@@ -21,17 +21,10 @@ public class RenderMesh extends ApplicationTemplate{
             //Cube cube = new Cube(Position.fromDegrees(35.0, -120.0, 3000), 1000);
             Position pos = new Position(Angle.fromDegrees(0),Angle.fromDegrees(0),100);
             String filename = "/home/vishal/NWW/sampleData/DSM.png";
-            MeshSurfaceVBO waterSurface = new MeshSurfaceVBO(filename,pos);
-            ShapeAttributes normalAttributes = new BasicShapeAttributes();
-            
-            normalAttributes.setInteriorMaterial(Material.YELLOW);
-            normalAttributes.setOutlineWidth(2);
-            normalAttributes.setOutlineOpacity(0.5);
-            normalAttributes.setDrawInterior(true);
-            normalAttributes.setDrawOutline(true);
-            
-            waterSurface.setAttributes(normalAttributes);
-            
+            float[] colorArr = {1,1,0};
+            MeshClass waterSurface = new MeshClass(filename,pos,colorArr);
+          
+            layer.setPickEnabled(true);
             layer.addRenderable(waterSurface);
 
             getWwd().getModel().getLayers().add(layer);
@@ -46,6 +39,6 @@ public class RenderMesh extends ApplicationTemplate{
 		Configuration.setValue(AVKey.INITIAL_PITCH, 45);
 		Configuration.setValue(AVKey.INITIAL_HEADING, 45);
 
-		ApplicationTemplate.start("World Wind Custom Renderable Tutorial", AppFrame.class);
+		ApplicationTemplate.start("World Wind", AppFrame.class);
 	}
 }
