@@ -15,11 +15,17 @@ import gov.nasa.worldwindx.examples.analytics.AnalyticSurfaceAttributes;
 import gov.nasa.worldwindx.examples.analytics.AnalyticSurfaceLegend;
 import gov.nasa.worldwindx.examples.util.ExampleUtil;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
+
+import timeDynamicSurface.WaterSurfaceModel;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import java.awt.image.Raster;
 import java.io.File;
+import java.io.IOException;
 import java.text.*;
 import java.util.ArrayList;
 public class AnalyticMeshDemo extends ApplicationTemplate{
@@ -44,25 +50,68 @@ public class AnalyticMeshDemo extends ApplicationTemplate{
             insertBeforePlacenames(this.getWwd(), this.analyticSurfaceLayer);
             this.getLayerPanel().update(this.getWwd());
 
-            //3D surface
-            createRandomAltitudeSurface(HUE_BLUE, HUE_RED, 500, 500, this.analyticSurfaceLayer);
+            //Create Height Surface
+            String file1 = "/home/vishal/NWW/sampleData/DSM.png";
+            String file2 = "/home/vishal/NWW/sampleData/floodPolygon.png";
+            //createTerrainSurface(HUE_BLUE, HUE_RED, 40, 40, file1, this.analyticSurfaceLayer);
+            //createTerrainSurface(HUE_BLUE, HUE_RED, 40, 40, file2, this.analyticSurfaceLayer);	
             
-            //Surface on globe
-            createRandomColorSurface(HUE_BLUE, HUE_RED, 40, 40, this.analyticSurfaceLayer);
-
-            // Load the static precipitation data. Since it comes over the network, load it in a separate thread to
-            // avoid blocking the example if the load is slow or fails.
-            /*Thread t = new Thread(new Runnable()
-            {
-                public void run()
-                {
-                    createPrecipitationSurface(HUE_BLUE, HUE_RED, analyticSurfaceLayer);
-                }
-            });
-            t.start();*/
+            //Interpolate from one to another:
+            overTimeVariation(HUE_BLUE, HUE_RED, 40, 40, file1,file2, this.analyticSurfaceLayer);
+            //WaterSurfaceModel waterModel1 = new WaterSurfaceModel(file1);
+        	//WaterSurfaceModel waterModel2 = new WaterSurfaceModel(file2);
+        	
+            //testTimer(waterModel1,waterModel2,10);
         }
     }
 
+    protected static void testTimer(final WaterSurfaceModel src,final WaterSurfaceModel des,final float totalTime,final AnalyticSurface surface,final double minHue, final double maxHue,final RenderableLayer outLayer){
+    	Timer timer = new Timer(2000,new ActionListener(){
+
+    		protected long startTime = -1;
+    		protected int size = src.getHeight() * src.getWidth(); 
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(this.startTime < 0){
+					this.startTime = System.currentTimeMillis();
+					System.out.println("Start Time"+ this.startTime);
+				}
+				System.out.println("Hello "+ (e.getWhen()-this.startTime));
+			
+				//float[] newHeight= new float[size];
+				float[] srcHeight = src.getHeightMap();
+				float[] desHeight = des.getHeightMap();
+				
+				ArrayList<AnalyticSurface.GridPointAttributes> attributesList = new ArrayList<AnalyticSurface.GridPointAttributes>();
+				
+				double minValue = 0;
+		        double maxValue = 255*1000;
+
+				for(int i=0 ; i<size ; i++){
+					float diff = desHeight[i]- srcHeight[i];
+					float timeEllapsed = (e.getWhen() - this.startTime)/1000;
+					float rate = diff/totalTime;
+					float inc_height = rate * timeEllapsed;
+					double value = (srcHeight[i] + inc_height)*1000;
+					
+		        	double hueFactor = WWMath.computeInterpolationFactor(value, minValue, maxValue);
+		            Color color = Color.getHSBColor((float) WWMath.mixSmooth(hueFactor, minHue, maxHue), 1f, 1f); 
+		            double opacity = WWMath.computeInterpolationFactor(value, minValue, minValue + (maxValue - minValue) * 0.1);
+		            Color rgbaColor = new Color(color.getRed(), color.getGreen(), color.getBlue(), (int) (255));
+
+		        	AnalyticSurface.GridPointAttributes attr = createGridAttribute(value,rgbaColor);
+		        	attributesList.add(attr);
+				}
+				
+		        //set the surface values
+		        surface.setValues(attributesList);
+
+		        if (surface.getClientLayer() != null)
+                    surface.getClientLayer().firePropertyChange(AVKey.LAYER, null, surface.getClientLayer());
+			}
+    	});
+    	timer.start();
+    }
     protected static Renderable createLegendRenderable(final AnalyticSurface surface, final double surfaceMinScreenSize,
         final AnalyticSurfaceLegend legend)
     {
@@ -86,6 +135,105 @@ public class AnalyticMeshDemo extends ApplicationTemplate{
     //********************  Random Altitude Surface  ***************//
     //**************************************************************//
 
+    static AnalyticSurface.GridPointAttributes createGridAttribute(final double value,final Color color){
+		return new AnalyticSurface.GridPointAttributes(){
+
+			@Override
+			public Color getColor() {
+				// TODO Auto-generated method stub
+				return color;
+			}
+
+			@Override
+			public double getValue() {
+				return value;
+			}
+			
+		};
+    }
+    protected static void overTimeVariation(double minHue, double maxHue, int width, int height,String filepath1,String filepath2, RenderableLayer outLayer){
+
+    	
+    	WaterSurfaceModel waterModel1 = new WaterSurfaceModel(filepath1);
+    	WaterSurfaceModel waterModel2 = new WaterSurfaceModel(filepath2);
+        
+        AnalyticSurface surface = new AnalyticSurface();
+        surface.setSector(Sector.fromDegrees(25, 35, -90, -80));
+        surface.setAltitude(400e3);
+        //initial surface created::
+        surface.setDimensions(waterModel1.getWidth(), waterModel1.getHeight());
+        surface.setClientLayer(outLayer);
+        outLayer.addRenderable(surface);
+        
+        testTimer(waterModel1,waterModel2,5,surface,minHue,maxHue,outLayer);
+        
+ }
+    protected static void createTerrainSurface(double minHue, double maxHue, int width, int height,String filepath, RenderableLayer outLayer){
+    	
+
+    	//Read the terrain data in 1D array:
+    	WaterSurfaceModel waterModel = new WaterSurfaceModel(filepath);
+        
+        AnalyticSurface surface = new AnalyticSurface();
+        surface.setSector(Sector.fromDegrees(25, 35, -90, -80));
+        surface.setAltitude(400e3);
+        surface.setDimensions(waterModel.getWidth(), waterModel.getHeight());
+        surface.setClientLayer(outLayer);
+        outLayer.addRenderable(surface);
+        
+        
+        //create the analytic surface
+        ArrayList<AnalyticSurface.GridPointAttributes> attributesList = new ArrayList<AnalyticSurface.GridPointAttributes>();
+        
+        //set the attributesList from waterModel
+        //AnalyticSurface.GridPointAttributes = new AnalyticSurface.GridPointAttributes();
+        
+        double minValue = 0;
+        double maxValue = 255*1000;
+
+        int size = waterModel.getWidth() * waterModel.getHeight();
+        float[] heightMap = waterModel.getHeightMap();
+        for(int i=0 ; i<size ; i++){
+        	double value = heightMap[i]*1000;
+        	double hueFactor = WWMath.computeInterpolationFactor(value, minValue, maxValue);
+            Color color = Color.getHSBColor((float) WWMath.mixSmooth(hueFactor, minHue, maxHue), 1f, 1f); 
+            double opacity = WWMath.computeInterpolationFactor(value, minValue, minValue + (maxValue - minValue) * 0.1);
+            Color rgbaColor = new Color(color.getRed(), color.getGreen(), color.getBlue(), (int) (255 * opacity));
+
+        	AnalyticSurface.GridPointAttributes attr = createGridAttribute(heightMap[i]*1000,rgbaColor);
+        	attributesList.add(attr);
+        }
+        //set the surface values
+        surface.setValues(attributesList);
+
+        //Set the labelFormat
+        final double altitude = surface.getAltitude();
+        final double verticalScale = surface.getVerticalScale();
+        
+        System.out.println("altitude"+altitude+ " verticalScale" + verticalScale);
+        
+        Format legendLabelFormat = new DecimalFormat("# km")
+        {   
+            public StringBuffer format(double number, StringBuffer result, FieldPosition fieldPosition)
+            {   
+                double altitudeMeters = altitude + verticalScale * number;
+                double altitudeKm = altitudeMeters * WWMath.METERS_TO_KILOMETERS;
+                return super.format(altitudeKm, result, fieldPosition);
+            }   
+        };
+        
+        AnalyticSurfaceLegend legend = AnalyticSurfaceLegend.fromColorGradient(minValue, maxValue, minHue, maxHue,
+        AnalyticSurfaceLegend.createDefaultColorGradientLabels(minValue, maxValue, legendLabelFormat),
+        AnalyticSurfaceLegend.createDefaultTitle("Random Altitudes"));
+        
+        legend.setOpacity(0.8);
+    	legend.setScreenLocation(new Point(650, 300));
+    	outLayer.addRenderable(createLegendRenderable(surface, 300, legend));
+        
+    }
+    
+    
+    
     protected static void createRandomAltitudeSurface(double minHue, double maxHue, int width, int height,
         RenderableLayer outLayer)
     {
@@ -159,7 +307,13 @@ public class AnalyticMeshDemo extends ApplicationTemplate{
         final double minValue, final double maxValue, final double minHue, final double maxHue,
         final AnalyticSurface surface)
     {
-        Timer timer = new Timer(20, new ActionListener()
+    	for(int i=0 ; i<firstBuffer.length() ; i++){
+    		System.out.print(firstBuffer.getDouble(i)+", ");
+    	}
+    	surface.setValues(createMixedColorGradientGridValues(
+                0.5, firstBuffer, firstBuffer, minValue, maxValue, minHue, maxHue));
+    	System.out.println("This function is called again!!");
+        /*Timer timer = new Timer(20, new ActionListener()
         {
             protected long startTime = -1;
 
@@ -168,6 +322,7 @@ public class AnalyticMeshDemo extends ApplicationTemplate{
                 if (this.startTime < 0)
                     this.startTime = System.currentTimeMillis();
 
+                
                 double t = (double) (e.getWhen() - this.startTime) / (double) timeToMix;
                 int ti = (int) Math.floor(t);
 
@@ -179,11 +334,12 @@ public class AnalyticMeshDemo extends ApplicationTemplate{
                 surface.setValues(createMixedColorGradientGridValues(
                     a, firstBuffer, secondBuffer, minValue, maxValue, minHue, maxHue));
 
+               // System.out.println("This function is called again!!");
                 if (surface.getClientLayer() != null)
                     surface.getClientLayer().firePropertyChange(AVKey.LAYER, null, surface.getClientLayer());
             }
         });
-        timer.start();
+        timer.start();*/
     }
 
     public static Iterable<? extends AnalyticSurface.GridPointAttributes> createMixedColorGradientGridValues(double a,
