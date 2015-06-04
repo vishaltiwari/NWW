@@ -3,6 +3,7 @@ package render;
 import java.util.ArrayList;
 import java.util.List;
 
+import controller.ElevationExtractor;
 import controller.StartUp;
 import citygmlModel.BuildingsClass;
 import citygmlModel.Buildings;
@@ -22,51 +23,19 @@ import gov.nasa.worldwind.render.ShapeAttributes;
 import gov.nasa.worldwindx.examples.ApplicationTemplate;
 
 public class AppFrame extends ApplicationTemplate {
+	
 	public static class RenderFrame extends ApplicationTemplate.AppFrame
     {
         public RenderFrame()
         {
             super(true, true, false);
 
-            
+            //Create the UI for extracting the elevation
+            new ElevationExtractor(this);
             //this.getWwd().addSelectListener(new BasicDragger(this.getWwd()));
             
             //create layer for a polygon
             RenderableLayer layer = new RenderableLayer();
-            
-            //set the basic attributes for the polygon
-            ShapeAttributes normalAttributes = new BasicShapeAttributes();
-            
-            normalAttributes.setInteriorMaterial(Material.YELLOW);
-            normalAttributes.setOutlineWidth(2);
-            normalAttributes.setOutlineOpacity(0.5);
-            normalAttributes.setDrawInterior(true);
-            normalAttributes.setDrawInterior(true);
-            
-            //define the coordinates position
-            ArrayList<Position> positions = new ArrayList<Position>();
-            positions.add(Position.fromDegrees(52, 10, 5e4));
-            positions.add(Position.fromDegrees(55, 11, 5e4));
-            positions.add(Position.fromDegrees(55, 11, 5e4));
-            positions.add(Position.fromDegrees(52, 14, 5e4));
-            positions.add(Position.fromDegrees(52, 10, 5e4));
-            
-            //Polygon poly = new Polygon(positions);
-            Polygon poly = new Polygon(positions);
-            poly.setAltitudeMode(WorldWind.RELATIVE_TO_GROUND);
-            
-            poly.setAttributes(normalAttributes);
-            poly.setValue(AVKey.DISPLAY_NAME, "My extruded first polygon");
-            
-            //Added the renderables to the layer
-            layer.addRenderable(poly);
-            //add the layer to the model
-            insertBeforeCompass(getWwd(),layer);
-            
-            //Create the Buildings Layer
-            //String filePath = "/home/vishal/NWW/sampleData/LOD2_Buildings_v100.gml";
-            //String filePath = "/home/vishal/NWW/sampleData/waldbruecke_v1.0.0.gml";
-            //MultipleBuildingsFileClass obj = new MultipleBuildingsFileClass();
             
             //RenderingBuildingSurface
             try {
@@ -78,7 +47,6 @@ public class AppFrame extends ApplicationTemplate {
     				RenderableLayer buildingsLayer = renderFile.startRenderingBuildings(building);
     				insertBeforeCompass(getWwd(),buildingsLayer);
     			}
-    			
     			
     		} catch (Exception e) {
     			// TODO Auto-generated catch block
