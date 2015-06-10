@@ -52,37 +52,7 @@ public class AppFrame extends ApplicationTemplate {
     			// TODO Auto-generated catch block
     			e.printStackTrace();
     		}
-            /*Buildings buildings = new Buildings();
             
-            try {
-				buildings.IterateGMLFile(filePath);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				System.out.println("Error in loading the citygml file");
-				e.printStackTrace();
-			}
-            
-            //Render building surface
-            RenderingBuildingSurface renderer = new RenderingBuildingSurface();
-            RenderableLayer buildingsLayer = renderer.renderBuildings(buildings);
-            insertBeforeCompass(getWwd(),buildingsLayer);
-            
-            //Render walls surface
-            RenderingBuildingWalls buildingWallRenderer = new RenderingBuildingWalls();
-            RenderableLayer wallsLayer = buildingWallRenderer.renderWalls(buildings);
-            insertBeforeCompass(getWwd(),wallsLayer);
-            
-            //Render roof surface
-            RenderBuildingRoofs roofRenderer = new RenderBuildingRoofs();
-            RenderableLayer roofsLayer = roofRenderer.renderRoofs(buildings);
-            insertBeforeCompass(getWwd(),roofsLayer);*/
-            
-            //update the layer panel
-            //this.getLayerPanel().update(this.getWwd());
-            
-            // Add graticule
-            //insertBeforePlacenames(this.getWwd(), new LatLonGraticuleLayer());
-
             // Update layer
             //this.getLayerPanel().update(this.getWwd());
         }
