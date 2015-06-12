@@ -69,7 +69,7 @@ public class ExtractBoundry {
 		double[] upperRight = GDALInfoReportCorner(dataSet,"Upper Right",dataSet.getRasterXSize(),0.0);
 		//System.out.println(upperRight[0]+" "+upperRight[1]);
 		
-		Sector sector = Sector.fromDegrees(lowerLeft[0], upperRight[0], lowerLeft[1], upperRight[1]);
+		Sector sector = Sector.fromDegrees(lowerLeft[1], upperRight[1], lowerLeft[0], upperRight[0]);
 		
 		return sector;
 	}

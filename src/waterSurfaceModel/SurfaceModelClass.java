@@ -22,6 +22,7 @@ public class SurfaceModelClass {
 	public SurfaceModelClass(String filePath){
 		this.filePath = filePath;
 		this.setProjection();
+		this.heightMap = this.loadHeightMap();
 	}
 	/**
 	 * Methods
@@ -29,11 +30,11 @@ public class SurfaceModelClass {
 	
 	public void setProjection(){
 		this.sector = ExtractBoundry.extractBoundry(this.filePath);
-		System.out.println(sector.getMaxLatitude().toString());
+		/*System.out.println(sector.getMaxLatitude().toString());
 		System.out.println(sector.getMinLatitude().toString());
 		
 		System.out.println(sector.getMaxLongitude().toString());
-		System.out.println(sector.getMinLongitude().toString());
+		System.out.println(sector.getMinLongitude().toString());*/
 	}
 	
 	public float[] loadHeightMap(){
@@ -46,7 +47,7 @@ public class SurfaceModelClass {
 			this.width = image_raster.getWidth();
 			this.height = image_raster.getHeight();
 			
-			HeightMap = new float[this.height*this.width];
+			HeightMap = new float[this.height * this.width];
 			
 			int[] pixel = new int[1];
 			int[] buffer = new int[1];
@@ -55,6 +56,7 @@ public class SurfaceModelClass {
 				for(int j=0 ; j<this.height; j++){
 					
 					pixel = image_raster.getPixel(i, j, buffer);
+					//System.out.print(pixel[0]+" ");
 					HeightMap[count] = pixel[0];
 					++count;
 					//System.out.print(HeightMap[i][j] + " ");
@@ -101,10 +103,13 @@ public class SurfaceModelClass {
 		this.sector = sector;
 	}
 	
-	public static void main(String argv[]){
+	/*public static void main(String argv[]){
 		SurfaceModelClass obj = new SurfaceModelClass("/home/vishal/Desktop/Grass_Output/images/20.tif");
 		obj.loadHeightMap();
+		float[] heightMap = obj.getHeightMap();
+		if(heightMap == null)
+			System.out.println("returned array is ponting to null");
 		System.out.println("width:"+obj.getWidth() + " height:"+obj.getHeight());
-	}
+	}*/
 	
 }
