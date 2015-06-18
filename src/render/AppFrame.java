@@ -53,6 +53,19 @@ public class AppFrame extends ApplicationTemplate {
     			e.printStackTrace();
     		}
             
+            //Add the waterSurface
+            //RenderAnalyticSurface waterSurface = new RenderAnalyticSurface("/home/vishal/NWW/sampleData/floodPolygon2.tif");
+            RenderAnalyticSurface waterSurface = new RenderAnalyticSurface("/home/vishal/Desktop/Grass_Output/testElevation.tif");
+            RenderableLayer waterlayer = waterSurface.renderWaterSurface("/home/vishal/Desktop/Grass_Output/images");
+            
+            insertBeforePlacenames(this.getWwd(), waterlayer);
+            
+            /*RenderAnalyticSurface waterSurface2 = new RenderAnalyticSurface("/home/vishal/Desktop/Grass_Output/testElevationLive.tif");
+            RenderableLayer waterlayer2 = waterSurface2.renderWaterSurface();
+            
+            insertBeforePlacenames(this.getWwd(), waterlayer2);*/
+            
+            this.getLayerPanel().update(this.getWwd());
             // Update layer
             //this.getLayerPanel().update(this.getWwd());
         }

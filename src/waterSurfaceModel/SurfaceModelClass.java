@@ -52,10 +52,10 @@ public class SurfaceModelClass {
 			int[] pixel = new int[1];
 			int[] buffer = new int[1];
 			
-			for(int i=0 ; i<this.width ; i++){
-				for(int j=0 ; j<this.height; j++){
+			for(int y=0 ; y<this.height ; y++){
+				for(int x=0 ; x<this.width; x++){
 					
-					pixel = image_raster.getPixel(i, j, buffer);
+					pixel = image_raster.getPixel(x, y, buffer);
 					//System.out.print(pixel[0]+" ");
 					HeightMap[count] = pixel[0];
 					++count;

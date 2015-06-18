@@ -10,8 +10,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import waterSurfaceModel.CreateDiffMaps.Pair;
-
 public class CreateDiffMaps {
 
 	public static class Pair{
@@ -151,7 +149,7 @@ public class CreateDiffMaps {
 	}
 	
 	public static void main(String argv[]){
-		CreateDiffMaps obj = new CreateDiffMaps("/home/vishal/Desktop/Grass_Output/images");
+		CreateDiffMaps obj = new CreateDiffMaps("/home/vishal/Desktop/Grass_Output/images3");
 		
 		obj.createDiffMaps();
 		

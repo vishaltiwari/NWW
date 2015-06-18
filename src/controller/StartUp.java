@@ -21,7 +21,8 @@ public class StartUp {
         /*Configuration.setValue(AVKey.INITIAL_LATITUDE, 76.51134570525976);
         Configuration.setValue(AVKey.INITIAL_LONGITUDE, 9.019376924014613e-5);
         Configuration.setValue(AVKey.INITIAL_ALTITUDE, 10);*/
-		String filePath = "/home/vishal/NWW/sampleData/CityGML_British_Ordnance_Survey_v1.0.0.xml";
+		String filePath = "/home/vishal/NWW/sampleData/waldbruecke_v1.0.0.gml";
+		//String filePath = "/home/vishal/NWW/sampleData/LOD2_Buildings_v100.gml";
         MultipleBuildingsFileClass obj1 = new MultipleBuildingsFileClass();
         
         double latitude=0,  longitude =0 , height=100;
@@ -60,8 +61,13 @@ public class StartUp {
         
 		Configuration.setValue(AVKey.INITIAL_LATITUDE, latitude);
         Configuration.setValue(AVKey.INITIAL_LONGITUDE, longitude);
-        Configuration.setValue(AVKey.INITIAL_ALTITUDE, height);
+        Configuration.setValue(AVKey.INITIAL_ALTITUDE, height*8);
         
-        ApplicationTemplate.start("Getting Started with NASA World Wind", RenderFrame.class);
+        //Remove this, just for gif creation
+        /*Configuration.setValue(AVKey.INITIAL_LATITUDE, 52.3263);
+        Configuration.setValue(AVKey.INITIAL_LONGITUDE, 13.0389);
+        Configuration.setValue(AVKey.INITIAL_ALTITUDE, height*11);*/
+        
+        ApplicationTemplate.start("Static Water Visualization", RenderFrame.class);
 	}
 }
