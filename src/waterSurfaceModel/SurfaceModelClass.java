@@ -2,11 +2,25 @@ package waterSurfaceModel;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.Raster;
+import java.awt.image.renderable.ParameterBlock;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 
 import javax.imageio.ImageIO;
+import javax.media.jai.JAI;
+import javax.media.jai.RenderedOp;
 
+import org.gdal.gdal.Band;
+import org.gdal.gdal.Dataset;
+import org.gdal.gdal.gdal;
+import org.gdal.gdalconst.gdalconst;
+import org.gdal.gdalconst.gdalconstConstants;
+
+import com.sun.media.jai.codec.FileSeekableStream;
+import com.sun.media.jai.codec.TIFFDecodeParam;
+
+import gov.nasa.worldwind.formats.tiff.GeotiffReader;
 import gov.nasa.worldwind.geom.Sector;
 
 public class SurfaceModelClass {
@@ -19,10 +33,19 @@ public class SurfaceModelClass {
 	/**
 	 * Constructor
 	 * **/
+	public SurfaceModelClass(int width,int height){
+		this.filePath = null;
+		this.sector = null;
+		//this.setProjection();
+		this.width = width;
+		this.height = height;
+		heightMap = new float[width*height];
+		Arrays.fill(heightMap, 0);
+	}
 	public SurfaceModelClass(String filePath){
 		this.filePath = filePath;
 		this.setProjection();
-		this.heightMap = this.loadHeightMap();
+		this.heightMap = this.loadHeightMapGDAL();
 	}
 	/**
 	 * Methods
@@ -35,6 +58,79 @@ public class SurfaceModelClass {
 		
 		System.out.println(sector.getMaxLongitude().toString());
 		System.out.println(sector.getMinLongitude().toString());*/
+	}
+	
+	public static float[] loadHeightMapGeoTiffReader(String filename){
+		int width,height;
+		float[] HeightMap;
+		try {
+			FileSeekableStream stream = new FileSeekableStream(filename);
+			TIFFDecodeParam decodeParam = new TIFFDecodeParam();
+			decodeParam.setDecodePaletteAsShorts(true);
+			ParameterBlock params = new ParameterBlock();
+			params.add(stream);
+			RenderedOp image1 = JAI.create("tiff", params);
+
+			BufferedImage image = image1.getAsBufferedImage();
+			
+			Raster image_raster = image.getData();
+			
+			width = image_raster.getWidth();
+			height = image_raster.getHeight();
+			
+			
+			
+			HeightMap = new float[height * width];
+			
+			int[] pixel = new int[1];
+			int[] buffer = new int[1];
+			int count=0;
+			for(int y=0 ; y<height ; y++){
+				for(int x=0 ; x<width; x++){
+					
+					pixel = image_raster.getPixel(x, y, buffer);
+					System.out.print(pixel[0]+" ");
+					HeightMap[count] = pixel[0];
+					++count;
+					//System.out.print(HeightMap[i][j] + " ");
+				}
+				System.out.println("");
+			}
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
+	public float[] loadHeightMapGDAL(){
+		
+		int numBands;
+		Dataset hDataset;
+		gdal.AllRegister();
+		
+		hDataset = gdal.Open(this.filePath,gdalconstConstants.GA_ReadOnly);
+		numBands = hDataset.getRasterCount();
+		
+		//System.out.println(numBands);
+		
+		Band band = hDataset.GetRasterBand(1);
+		
+		width = band.getXSize();
+		height = band.getYSize();
+		
+		//System.out.println("xSize:"+width+" ySize:"+height);
+		
+		float[] heightMap = new float[width*height];
+		
+		band.ReadRaster(0,0,width,height,gdalconst.GDT_Float32,heightMap);
+		
+		/*for(int y=0 ; y<height*width ; y++){
+			System.out.println(heightMap[y]+" ");
+		}*/
+		
+		return heightMap;
 	}
 	
 	public float[] loadHeightMap(){
@@ -71,8 +167,8 @@ public class SurfaceModelClass {
 		return HeightMap;
 	}
     
-    public float getHeight(int i,int j){
-		return heightMap[i*width+j];
+    public float getHeight(int x,int y){
+		return heightMap[y*width+x];
 	}
 	/**
 	 * Setters and getters of the Model
@@ -104,12 +200,14 @@ public class SurfaceModelClass {
 	}
 	
 	/*public static void main(String argv[]){
-		SurfaceModelClass obj = new SurfaceModelClass("/home/vishal/Desktop/Grass_Output/images/20.tif");
-		obj.loadHeightMap();
+		SurfaceModelClass obj = new SurfaceModelClass("/home/vishal/Desktop/Grass_Output/geotiffElevation.tif");
+		//obj.loadHeightMap();
 		float[] heightMap = obj.getHeightMap();
 		if(heightMap == null)
 			System.out.println("returned array is ponting to null");
 		System.out.println("width:"+obj.getWidth() + " height:"+obj.getHeight());
+		//loadHeightMapGDAL("/home/vishal/Desktop/Grass_Output/extractedElevation.tif");
+		//loadHeightMapGeoTiffReader("/home/vishal/Desktop/Grass_Output/geotiffElevation.tif");	
 	}*/
 	
 }
