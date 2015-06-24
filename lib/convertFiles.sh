@@ -1,6 +1,6 @@
 #!/bin/bash
 
-FILES=/home/vishal/Desktop/Grass_Output/images/*
+FILES=/home/vishal/Desktop/Grass_Output/images5/*
 
 for f in $FILES
 do
