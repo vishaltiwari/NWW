@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
+import controller.CrsConverter;
 import controller.CrsConverterGDAL;
 import citygmlModel.BuildingsClass;
 import citygmlModel.CoordinateClass;
@@ -20,11 +21,13 @@ import gov.nasa.worldwind.util.WWUtil;
 
 public class RenderObjects {
 	private ShapeAttributes shapeAttribute;
-	CrsConverterGDAL convert = new CrsConverterGDAL();
+	private String crs;
+	//CrsConverterGDAL convert = new CrsConverterGDAL();
 	
 	
-	public RenderObjects(){
+	public RenderObjects(String crs){
 		this.shapeAttribute = new BasicShapeAttributes();
+		this.crs = crs;
 	}
 	public RenderableLayer startRenderingBuildings(BuildingsClass buildings){
 		RenderableLayer layer = new RenderableLayer();
@@ -97,7 +100,7 @@ public class RenderObjects {
 			ArrayList<Position> Positions = new ArrayList<Position>();
 			for(CoordinateClass coord : coords){
 				//System.out.println("Inside the coords class");
-				double[] arr = convert.convertCoordinate("+proj=utm +zone=45 +ellps=WGS72 +towgs84=0,0,4.5,0,0,0.554,0.2263 +units=m +no_defs", "WGS84", coord.getCoords());
+				double[] arr = CrsConverter.convertCoordinate(this.crs, "WGS84", coord.getCoords());
 				//System.out.println(arr[0]+" "+arr[1]+" "+arr[2]);
 				Positions.add(Position.fromDegrees(arr[1],arr[0],arr[2]));
 				
@@ -126,7 +129,7 @@ public class RenderObjects {
 			List<CoordinateClass> coords = polygon.getPolygon();
 			ArrayList<Position> Positions = new ArrayList<Position>();
 			for(CoordinateClass coord : coords){
-				double[] arr = convert.convertCoordinate("+proj=utm +zone=45 +ellps=WGS72 +towgs84=0,0,4.5,0,0,0.554,0.2263 +units=m +no_defs", "WGS84", coord.getCoords());
+				double[] arr = CrsConverter.convertCoordinate(this.crs, "WGS84", coord.getCoords());
 				//System.out.println(arr[0]+" "+arr[1]+" "+arr[2]);
 				Positions.add(Position.fromDegrees(arr[1],arr[0],arr[2]));
 			}
@@ -153,7 +156,7 @@ public class RenderObjects {
 			List<CoordinateClass> coords = polygon.getPolygon();
 			ArrayList<Position> Positions = new ArrayList<Position>();
 			for(CoordinateClass coord : coords){
-				double[] arr = convert.convertCoordinate("+proj=utm +zone=45 +ellps=WGS72 +towgs84=0,0,4.5,0,0,0.554,0.2263 +units=m +no_defs", "WGS84", coord.getCoords());
+				double[] arr = CrsConverter.convertCoordinate(this.crs, "WGS84", coord.getCoords());
 				//System.out.println(arr[0]+" "+arr[1]+" "+arr[2]);
 				Positions.add(Position.fromDegrees(arr[1],arr[0],arr[2]));
 			}
@@ -180,7 +183,7 @@ public class RenderObjects {
         	List<CoordinateClass> coords = polygon.getPolygon();
         	ArrayList<Position> Positions = new ArrayList<Position>();
 			for(CoordinateClass coord : coords){
-				double[] arr = convert.convertCoordinate("+proj=utm +zone=45 +ellps=WGS72 +towgs84=0,0,4.5,0,0,0.554,0.2263 +units=m +no_defs", "WGS84", coord.getCoords());
+				double[] arr = CrsConverter.convertCoordinate(this.crs, "WGS84", coord.getCoords());
 				//System.out.println(arr[0]+" "+arr[1]+" "+arr[2]);
 				Positions.add(Position.fromDegrees(arr[1],arr[0],arr[2]));
 			}

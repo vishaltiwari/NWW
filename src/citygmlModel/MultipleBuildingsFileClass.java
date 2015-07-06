@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.citygml4j.CityGMLContext;
 import org.citygml4j.builder.CityGMLBuilder;
+import org.citygml4j.builder.copy.CopyBuilder;
 import org.citygml4j.model.citygml.CityGML;
 import org.citygml4j.model.citygml.CityGMLClass;
 import org.citygml4j.model.citygml.building.Building;
@@ -13,9 +14,12 @@ import org.citygml4j.model.citygml.building.GroundSurface;
 import org.citygml4j.model.citygml.building.RoofSurface;
 import org.citygml4j.model.citygml.building.WallSurface;
 import org.citygml4j.model.citygml.core.CityModel;
+import org.citygml4j.model.gml.feature.AbstractFeature;
+import org.citygml4j.model.gml.feature.BoundingShape;
 import org.citygml4j.model.gml.geometry.primitives.Coord;
 import org.citygml4j.model.gml.geometry.primitives.DirectPosition;
 import org.citygml4j.model.gml.geometry.primitives.DirectPositionList;
+import org.citygml4j.model.gml.geometry.primitives.Envelope;
 import org.citygml4j.model.gml.geometry.primitives.LinearRing;
 import org.citygml4j.model.gml.geometry.primitives.PosOrPointPropertyOrPointRep;
 import org.citygml4j.model.gml.geometry.primitives.Solid;
@@ -32,32 +36,60 @@ public class MultipleBuildingsFileClass {
 	List<SurfaceMember> wallList = new ArrayList<SurfaceMember>();
 	List<SurfaceMember> roofList = new ArrayList<SurfaceMember>();
 	List<SurfaceMember> solidList = new ArrayList<SurfaceMember>();
+	public List<Envelope> envelopeList = new ArrayList<Envelope>();
+	Envelope newEnv = new Envelope();
+	String crs;
+	String layerName;
+	
+
 	String typeFlag;
 	
 
+	public String getLayerName() {
+		return layerName;
+	}
+	public void setLayerName(String layerName) {
+		this.layerName = layerName;
+	}
+
+	public String getCrs() {
+		return crs;
+	}
+	public void setCrs(String crs) {
+		this.crs = crs;
+	}
 	public MultipleBuildingsFileClass(){
+		this.crs="";
 		this.buildingsList = new ArrayList<BuildingsClass>();
 	}
 	public void IterateGMLFile(String filepath) throws Exception{
 		
+		System.out.println("filepath:"+filepath);
 		CityGMLContext ctx = new CityGMLContext();
 		CityGMLBuilder builder = ctx.createCityGMLBuilder();
 		
 		CityGMLInputFactory in = builder.createCityGMLInputFactory();
 		try{
 			CityGMLReader reader = in.createCityGMLReader(new File(filepath));
+			System.out.println("Going to read the data, value of hasNext element:"+reader.hasNext());
 			while(reader.hasNext()){
 				CityGML citygml = reader.nextFeature();
-				//System.out.println("Found class:" + citygml.getCityGMLClass() + "\nVersion"+citygml.getCityGMLModule().getVersion());
+				System.out.println("Found class:" + citygml.getCityGMLClass() + "\nVersion"+citygml.getCityGMLModule().getVersion());
 				if(citygml.getCityGMLClass() == CityGMLClass.CITY_MODEL)
 				{
 					CityModel cityModel = (CityModel)citygml;
+					
 					
 					//FeatureWalker buildingWalker = IterateBuildings();
 					//cityModel.accept(buildingWalker);
 					
 					//A visitor Iterates over all the element in the entire file 
 					BuildingsClass building = new BuildingsClass();
+					
+					//Get the crs
+					//AbstractFeature feature = (AbstractFeature)cityModel;
+					BoundingShape bound = cityModel.getBoundedBy();
+					
 					this.typeFlag="groundSurface";
 					FeatureWalker groundWalker = IterateGroundSurface(building);
 					cityModel.accept(groundWalker);
@@ -74,6 +106,9 @@ public class MultipleBuildingsFileClass {
 					FeatureWalker solidWalker = IterateSolid(building);
 					cityModel.accept(solidWalker);
 					
+					//FeatureWalker buildingWalker = IterateBuildings(building);
+					//cityModel.accept(buildingWalker);
+					
 					this.buildingsList.add(building);
 					
 				}
@@ -88,48 +123,27 @@ public class MultipleBuildingsFileClass {
 			e.printStackTrace();
 		}
 	}
-	private FeatureWalker IterateBuildings(){
+	private FeatureWalker IterateBuildings(BuildingsClass singleBuilding){
 		FeatureWalker buildingWalker = new FeatureWalker(){
 			public void visit(Building building){
-				BuildingsClass singleBuilding = new BuildingsClass();
 				
-				//TODO::Set other building properties
-				if(building.isSetId())
-					singleBuilding.setId(building.getId());
-				if(building.isSetName()){
-					//building.getN
-					//singlebuilding.setName(building.getName());
+				BoundingShape bound = building.getBoundedBy();
+				
+				if(bound.isSetEnvelope()){
+					Envelope env = bound.getEnvelope();
+					System.out.println("crs:"+env.getSrsName());
+					newEnv = new Envelope();
+					newEnv.setSrsName(env.getSrsName());
+					//CopyBuilder builder = null;
+					//builder.copy(newEnv);
+					//env.copyTo(newEnv, builder);
+					System.out.println(newEnv.getSrsName());
+					envelopeList.add(newEnv);
 				}
-				if(building.isSetYearOfConstruction())
-					singleBuilding.setYearOfConstruction(building.getYearOfConstruction().getTime().toString());
-				if(building.isSetYearOfDemolition())
-					singleBuilding.setYearOfDemolition(building.getYearOfDemolition().getTime().toString());
-				if(building.isSetMeasuredHeight()){
-					//singleBuilding.setMeasuredHeight(Double.parseDouble(building.getMeasuredHeight().toString()));
-				}
-				/////////////////////////////////////
-				//Walk through wallSurface, wallSurface, roofSurface, soild
-				
-				//FeatureWalker groundWalker = IterateGroundSurface(singleBuilding);
-				
-				//FeatureWalker wallWalker = IterateWall(singleBuilding);
-				
-				/*surfaceMemberList = new ArrayList<SurfaceMember>();
-				FeatureWalker roofWalker = IterateRoof(singleBuilding);*/
-				
-				//surfaceMemberList = new ArrayList<SurfaceMember>();
-				//FeatureWalker soildWalker = IterateSolid(singleBuilding);
-				
-				
-				//building.accept(groundWalker);
-				//building.accept(wallWalker);
-				//building.accept(roofWalker);
-				//building.accept(soildWalker);
-				////////////////////////////////////
-				buildingsList.add(singleBuilding);
-				
 			}
 		};
+
+		singleBuilding.setEnvolope(newEnv);
 		return buildingWalker;
 	}
 
@@ -207,9 +221,21 @@ public class MultipleBuildingsFileClass {
 	}
 	
 	private FeatureWalker IterateSolid(BuildingsClass singleBuilding){
+		
 		FeatureWalker solidWalker = new FeatureWalker(){
 			
 			public void visit(Building building){
+				//Bounding
+				/*BoundingShape bound = building.getBoundedBy();
+				if(bound.isSetEnvelope()){
+					Envelope evn = bound.getEnvelope();
+					evn.getSrsName();
+					crs = evn.getSrsName();
+					System.out.println(crs);
+				}
+				else{
+					System.out.println("The crsString is not set");
+				}*/
 				GMLWalker Walker = new GMLWalker(){
 					public void visit(Solid solid){
 						if(solid.isSetExterior()){
@@ -224,10 +250,12 @@ public class MultipleBuildingsFileClass {
 				};
 				building.accept(Walker);
 			}
+		
 		};
 		singleBuilding.setSolid(solidList);
 		return solidWalker;
 	}
+
 	
 	private void visitMethod(LinearRing linearRing){
 		if(linearRing.isSetPosList()){
@@ -238,7 +266,7 @@ public class MultipleBuildingsFileClass {
 			PolygonClass poly = new PolygonClass();
 			for(int i=0 ; i<points.size() ;i+=3){
 				double[] vals = new double[]{points.get(i) , points.get(i+1),points.get(i+2)};
-				//System.out.println(vals[0]+" "+vals[1]+" "+vals[2]);
+				System.out.println(vals[0]+" "+vals[1]+" "+vals[2]);
 				CoordinateClass coord = new CoordinateClass(vals);
 				polygonfloor.add(coord);
 			}
@@ -288,9 +316,6 @@ public class MultipleBuildingsFileClass {
 			}
 			//System.out.println("Its not a PosList :(");
 		}
-	}
-	private void visitMethod2(LinearRing linearRing){
-		
 	}
 
 	public List<BuildingsClass> getBuildingsList() {

@@ -41,6 +41,12 @@ public class CreateDiffMaps {
 	
 	//0 means use created cache if any, 1: override the cache file and do fresh computation
 	private int overRideCacheFlag;
+	
+	//min and max values of the entire thing:
+	private double maxVal;
+	private double minVal;
+	
+	private File[] fileList;
 
 	/**
 	 * Constructors
@@ -62,10 +68,12 @@ public class CreateDiffMaps {
 		this.cachePath = this.dir + "/cache.txt";
 		this.interpolationFile = this.dir + "/interpolation.txt";
 		
-		this.TimeIntervalSimulation = 120000;
-		this.TimeInterval = 2000;
-		this.NumofSnapShots = this.TimeIntervalSimulation / this.TimeInterval;
+		this.TimeIntervalSimulation = 36000000;
+		this.TimeInterval = 120000;
+		this.NumofSnapShots = 1;
 		
+		this.maxVal = -1*Double.MAX_VALUE;
+		this.minVal = Double.MAX_VALUE;
 		
 	}
 	/**
@@ -83,7 +91,7 @@ public class CreateDiffMaps {
 	 * Saving the surfaceModel data as an arrayList
 	 * **/
 	public void saveSurfaceModel(){
-		File[] fileList = getFiles();
+		fileList = getFiles();
 
 		Arrays.sort(fileList,FileComparator);
 		
@@ -92,6 +100,20 @@ public class CreateDiffMaps {
 		for(int i=0 ; i<fileList.length ; i++){
 			File file = fileList[i];
 			SurfaceModelClass surface = new SurfaceModelClass(file.getAbsolutePath());
+			
+			double min_val = surface.getMinVal();
+			double max_val = surface.getMaxVal();
+			
+			System.out.println("file:"+file.getName()+" minVal:"+min_val+" maxVal:"+max_val);
+			if(Double.compare(this.maxVal, max_val) < 0){
+				this.maxVal = max_val;
+				//System.out.println("Value of max changed");
+			}
+			if(Double.compare(this.minVal, min_val) > 0){
+				this.minVal = min_val;
+				//System.out.println("Value of min changed");
+			}
+			
 			this.surfaceModel[i] = surface;
 		}
 	}
@@ -308,6 +330,12 @@ public class CreateDiffMaps {
 					if(diff != 0){
 						Pair p = new Pair(j,i);
 						Double deltaChange = new Double(diff);
+						
+						if(Double.compare(this.minVal,deltaChange.doubleValue()) > 0)
+							this.minVal = deltaChange.doubleValue();
+						if(Double.compare(deltaChange.doubleValue(),this.maxVal) > 0)
+							this.maxVal = deltaChange.doubleValue();
+						
 						map.put(p, deltaChange);
 					}
 				}
@@ -382,7 +410,6 @@ public class CreateDiffMaps {
 		}
 	};
 
-	
 	/**
 	 * Getter and Setter
 	 * **/
@@ -393,7 +420,6 @@ public class CreateDiffMaps {
 	public void setTimeStampedDiff(ArrayList<Map<Pair, Double>> timeStampedDiff) {
 		this.timeStampedDiff = timeStampedDiff;
 	}
-	
 	
 	public int getTimeIntervalSimulation() {
 		return TimeIntervalSimulation;
@@ -426,6 +452,31 @@ public class CreateDiffMaps {
 	public void setSurfaceModel(SurfaceModelClass[] surfaceModel) {
 		this.surfaceModel = surfaceModel;
 	}
+	
+	public double getMaxVal() {
+		return maxVal;
+	}
+
+	public void setMaxVal(double maxVal) {
+		this.maxVal = maxVal;
+	}
+
+	public double getMinVal() {
+		return minVal;
+	}
+
+	public void setMinVal(double minVal) {
+		this.minVal = minVal;
+	}
+
+	
+	public File[] getFileList() {
+		return fileList;
+	}
+
+	public void setFileList(File[] fileList) {
+		this.fileList = fileList;
+	}
 
 	/**
 	 * Main method just to test other methods
@@ -434,7 +485,7 @@ public class CreateDiffMaps {
 	public static void main(String argv[]){
 		long startTime = System.currentTimeMillis();
 		
-		CreateDiffMaps obj = new CreateDiffMaps("/home/vishal/Desktop/Grass_Output/images4",0);
+		CreateDiffMaps obj = new CreateDiffMaps("/home/vishal/Desktop/Grass_Output/images7",0);
 		/*try {
 			obj.interpolateData();
 		} catch (IOException e) {
@@ -442,6 +493,8 @@ public class CreateDiffMaps {
 			e.printStackTrace();
 		}*/
 		obj.saveSurfaceModel();
+		
+		System.out.println("minVal:"+obj.getMinVal()+" maxVal"+obj.getMaxVal());
 		
 		long endTime   = System.currentTimeMillis();
 		long totalTime = endTime - startTime;

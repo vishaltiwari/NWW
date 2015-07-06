@@ -30,6 +30,9 @@ public class SurfaceModelClass {
 	private int height;
 	private Sector sector;
 	
+	private double minVal;
+	private double maxVal;
+	
 	/**
 	 * Constructor
 	 * **/
@@ -126,6 +129,14 @@ public class SurfaceModelClass {
 		
 		band.ReadRaster(0,0,width,height,gdalconst.GDT_Float32,heightMap);
 		
+		double[] minMaxVal = new double[2];
+		
+		//2nd arg set to 1, if faster approx is okay.
+		band.ComputeRasterMinMax(minMaxVal, 0);
+		
+		this.minVal = minMaxVal[0];
+		this.maxVal = minMaxVal[1];
+		
 		/*for(int y=0 ; y<height*width ; y++){
 			System.out.println(heightMap[y]+" ");
 		}*/
@@ -198,16 +209,30 @@ public class SurfaceModelClass {
 	public void setSector(Sector sector) {
 		this.sector = sector;
 	}
+	public double getMinVal() {
+		return minVal;
+	}
+	public void setMinVal(double minVal) {
+		this.minVal = minVal;
+	}
+	public double getMaxVal() {
+		return maxVal;
+	}
+	public void setMaxVal(double maxVal) {
+		this.maxVal = maxVal;
+	}
 	
-	/*public static void main(String argv[]){
-		SurfaceModelClass obj = new SurfaceModelClass("/home/vishal/Desktop/Grass_Output/geotiffElevation.tif");
+	public static void main(String argv[]){
+		SurfaceModelClass obj = new SurfaceModelClass("/home/vishal/Desktop/Grass_Output/images7/1.tif");
 		//obj.loadHeightMap();
-		float[] heightMap = obj.getHeightMap();
-		if(heightMap == null)
-			System.out.println("returned array is ponting to null");
-		System.out.println("width:"+obj.getWidth() + " height:"+obj.getHeight());
-		//loadHeightMapGDAL("/home/vishal/Desktop/Grass_Output/extractedElevation.tif");
+		//float[] heightMap = obj.getHeightMap();
+		//if(heightMap == null)
+		//	System.out.println("returned array is ponting to null");
+		//System.out.println("width:"+obj.getWidth() + " height:"+obj.getHeight());
+		//obj.loadHeightMapGDAL("/home/vishal/Desktop/Grass_Output/extractedElevation.tif");
 		//loadHeightMapGeoTiffReader("/home/vishal/Desktop/Grass_Output/geotiffElevation.tif");	
-	}*/
+		
+		System.out.println("minVal:"+obj.getMinVal()+" maxVal:"+obj.getMaxVal());
+	}
 	
 }

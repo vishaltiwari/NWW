@@ -64,17 +64,17 @@ public class ExtractBoundry {
 		
 		//GDALInfoReportCorner();
 		double[] lowerLeft = GDALInfoReportCorner(dataSet,"Lower Left",0.0,dataSet.getRasterYSize());
-		//System.out.println(lowerLeft[0]+ " "+lowerLeft[1]);
+		System.out.println(lowerLeft[0]+ " "+lowerLeft[1]);
 		
 		double[] upperRight = GDALInfoReportCorner(dataSet,"Upper Right",dataSet.getRasterXSize(),0.0);
-		//System.out.println(upperRight[0]+" "+upperRight[1]);
+		System.out.println(upperRight[0]+" "+upperRight[1]);
 		
 		Sector sector = Sector.fromDegrees(lowerLeft[1], upperRight[1], lowerLeft[0], upperRight[0]);
 		
 		return sector;
 	}
-	/*public static void main(String argv[]){
-		String filename = "/home/vishal/Desktop/Grass_Output/images/20.tif";
+	public static void main(String argv[]){
+		String filename = "/home/vishal/Desktop/Grass_Output/01a_07_15.tif";
 		extractBoundry(filename);
-	}*/
+	}
 }

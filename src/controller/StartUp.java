@@ -13,6 +13,9 @@ import gov.nasa.worldwind.Configuration;
 import gov.nasa.worldwind.avlist.AVKey;
 import gov.nasa.worldwindx.examples.ApplicationTemplate;
 
+/**
+ * Reads the cityGML dataFile, and also sets the camera lat/long and height
+ * **/
 public class StartUp {
 	//The control starts from here
 	public static MultipleBuildingsFileClass obj;
@@ -59,6 +62,7 @@ public class StartUp {
         	e.printStackTrace();
         }
         
+        System.out.println("lat:"+latitude+" long:"+longitude+" altitude"+height);
 		Configuration.setValue(AVKey.INITIAL_LATITUDE, latitude);
         Configuration.setValue(AVKey.INITIAL_LONGITUDE, longitude);
         Configuration.setValue(AVKey.INITIAL_ALTITUDE, height*8);

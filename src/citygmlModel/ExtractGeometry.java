@@ -40,7 +40,7 @@ public class ExtractGeometry {
 		CityGMLBuilder builder = ctx.createCityGMLBuilder();
 		
 		CityGMLInputFactory in = builder.createCityGMLInputFactory();
-		CityGMLReader reader = in.createCityGMLReader(new File("/home/vishal/NWW/sampleData/LOD2_Buildings_v100.gml"));
+		CityGMLReader reader = in.createCityGMLReader(new File("/home/vishal/NWW/sampleData/LOD2_Building_v100.gml"));
 		
 		while(reader.hasNext())
 		{
@@ -75,7 +75,7 @@ public class ExtractGeometry {
 			FeatureWalker buildingwalker = new FeatureWalker(){
 				public void visit(Building building){
 					System.out.println("Building id"+building.getId());
-					System.out.println(building.getMeasuredHeight().getValue());
+					//System.out.println(building.getMeasuredHeight().getValue());
 					//List<BoundarySurfaceProperty> list = building.getBoundedBySurface();
 					//System.out.println(list);
 					FeatureWalker surfacewalker = new FeatureWalker(){

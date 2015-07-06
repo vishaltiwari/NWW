@@ -17,10 +17,13 @@ public class SamplecreateTif {
 			BufferedImage img  = ImageIO.read(file);
 			
 			ColorModel cm = img.getColorModel();
+			System.out.println(cm.getClass().getName());
+			ColorModel cm2;
+			
 			boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
 			WritableRaster raster = img.copyData(null);
 			
-			BufferedImage newImg = new BufferedImage(cm,raster,isAlphaPremultiplied,null);
+			BufferedImage newImg = new BufferedImage(cm,raster,isAlphaPremultiplied,null);	
 			ImageIO.write(newImg,"tif",new File("/home/vishal/Desktop/newoutimage.tif"));
 			
 		} catch (IOException e) {
@@ -33,6 +36,5 @@ public class SamplecreateTif {
 		String filename = "/home/vishal/NWW/sampleData/floodPolygon2.tif";
 		SamplecreateTif obj = new SamplecreateTif();
 		obj.writeTIF(filename);
-	}
-	
+	}	
 }
