@@ -394,7 +394,7 @@ public class StartUpGUI extends ApplicationTemplateTest{
 							 * Comment the part till line "BuildingsManager.buildingMappingToTile(mapping);" if you have tilled the area, and stored in the Database.
 							 */
 							
-							ChangeSRIDTables.changeSRID();
+							//ChangeSRIDTables.changeSRID();
 							
 							/*TilesManager manager = null;
 							try {
