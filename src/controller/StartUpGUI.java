@@ -88,6 +88,7 @@ import waterSurfaceModel.SurfaceModelClass;
 import citygmlModel.BuildingsClass;
 import citygmlModel.MultipleBuildingsFileClass;
 import dao.ChangeSRIDTables;
+import dao.CleanUpDao;
 import dao.GetBuildingEnvelope;
 import dao.GetTiles;
 import dao.PointTransformDao;
@@ -383,6 +384,30 @@ public class StartUpGUI extends ApplicationTemplateTest{
 					class ImportCityGMLThread extends SwingWorker<Void,Object>{
 
 						protected Void doInBackground() throws Exception {
+							//CleanUpDao.cleanDataBase();
+							
+							//TODO: Read the CityGMLFile using the CLI interface.
+							
+							//Create the tiles and assign via dao.
+							
+							/*
+							 * Comment the part till line "BuildingsManager.buildingMappingToTile(mapping);" if you have tilled the area, and stored in the Database.
+							 */
+							
+							ChangeSRIDTables.changeSRID();
+							
+							/*TilesManager manager = null;
+							try {
+								manager = new TilesManager();
+								manager.generateTiles();
+							} catch (Exception e1) {
+								e1.printStackTrace();
+							}
+							//Map the buildings to the indiviual tiles.
+							//InsertTileBuildingMappingdao.mapBuildingsToTiles();
+							Map<Integer,PGgeometry> mapping = GetBuildingEnvelope.getBuildingEvnveoples();
+							BuildingsManager.buildingMappingToTile(mapping);*/
+							
 							addGeometry();
 							return null;
 						}
