@@ -418,7 +418,8 @@ public class StartUpGUI extends ApplicationTemplateTest{
 							try{
 								insertBeforePlacenames(getWwd(), Properties.tilesLayer);
 								insertBeforePlacenames(getWwd(), Properties.buildingsLayer);
-								
+								Properties.buildingsLayer.setName("Building Layer");
+								StartUpGUI.dataLayer.add(Properties.buildingsLayer);
 								datalayerPanel.update(getWwd());
 								
 								List<Double> centerCameraLOCAL = Utils.getCameraInitCoordinates(Properties.evelope);
