@@ -159,8 +159,8 @@ public class MeshClass extends Polygon implements OrderedRenderable{
 			int[] pixel = new int[1];
 			int[] buffer = new int[1];
 			
-			for(int i=0 ; i<height ; i++){
-				for(int j=0 ; j<width; j++){
+			for(int i=0 ; i<width ; i++){
+				for(int j=0 ; j<height; j++){
 					
 					pixel = image_raster.getPixel(i, j, buffer);
 					HeightMap[count] = pixel[0];

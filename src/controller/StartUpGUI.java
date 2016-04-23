@@ -1,6 +1,7 @@
 package controller;
 
 import gov.nasa.worldwind.BasicModel;
+import gov.nasa.worldwind.Configuration;
 import gov.nasa.worldwind.Model;
 import gov.nasa.worldwind.WorldWind;
 import gov.nasa.worldwind.WorldWindow;
@@ -10,6 +11,7 @@ import gov.nasa.worldwind.event.RenderingExceptionListener;
 import gov.nasa.worldwind.event.SelectListener;
 import gov.nasa.worldwind.exception.WWAbsentRequirementException;
 import gov.nasa.worldwind.geom.Angle;
+import gov.nasa.worldwind.geom.LatLon;
 import gov.nasa.worldwind.geom.Position;
 import gov.nasa.worldwind.geom.Sector;
 import gov.nasa.worldwind.layers.Layer;
@@ -19,16 +21,24 @@ import gov.nasa.worldwind.layers.ViewControlsSelectListener;
 import gov.nasa.worldwind.layers.WorldMapLayer;
 import gov.nasa.worldwind.util.StatusBar;
 import gov.nasa.worldwind.util.WWUtil;
+import gov.nasa.worldwind.view.orbit.BasicOrbitView;
 import gov.nasa.worldwindx.examples.ApplicationTemplate;
 import gov.nasa.worldwindx.examples.ClickAndGoSelectListener;
 import gov.nasa.worldwindx.examples.LayerPanel;
 import gov.nasa.worldwindx.examples.analytics.AnalyticSurface;
 import gov.nasa.worldwindx.examples.util.HighlightController;
 import gov.nasa.worldwindx.examples.util.ToolTipController;
+import graphics.RenderTilesGrid;
 import gui.ApplicationTemplateTest;
 import gui.DataLayer;
 import gui.GraphPlot;
 import gui.ImportCityGMLJDialog;
+import helper.MousePressedMovedEvent;
+import helper.Properties;
+import helper.Utils;
+import logic.BuildingsManager;
+import logic.TilesManager;
+import model.Tile;
 import gui.AnimateOptionJDialog;
 import gui.ExportElevationJDialog;
 import gui.DepthValueJDialog;
@@ -50,6 +60,7 @@ import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Timer;
 
 import javax.swing.JButton;
@@ -66,12 +77,17 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.jfree.data.xy.XYSeries;
+import org.postgis.PGgeometry;
 
 import render.CylinderPole;
 import render.RenderAnalyticSurface;
 import render.RenderObjects;
 import waterSurfaceModel.SurfaceModelClass;
 import citygmlModel.BuildingsClass;
+import dao.ChangeSRIDTables;
+import dao.GetBuildingEnvelope;
+import dao.GetTiles;
+import dao.PointTransformDao;
 import net.miginfocom.swing.MigLayout;
 
 public class StartUpGUI extends ApplicationTemplateTest{
@@ -274,8 +290,32 @@ public class StartUpGUI extends ApplicationTemplateTest{
     	
     }
     
+    public void beforeStart(){
+    	/*ChangeSRIDTables.changeSRID();
+		
+		TilesManager manager = null;
+		try {
+			manager = new TilesManager();
+			manager.generateTiles();
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+		//Map the buildings to the indiviual tiles.
+		//InsertTileBuildingMappingdao.mapBuildingsToTiles();
+		Map<Integer,PGgeometry> mapping = GetBuildingEnvelope.getBuildingEvnveoples();
+		BuildingsManager.buildingMappingToTile(mapping);*/
+		
+		//Get the Center camera position of the starting scene.
+//		
+//		
+//		Configuration.setValue(AVKey.INITIAL_LATITUDE, lat);
+//		Configuration.setValue(AVKey.INITIAL_LONGITUDE, log);
+//		Configuration.setValue(AVKey.INITIAL_ALTITUDE, height);
+//		
+    }
+    
 	public StartUpGUI(){
-
+		
 		frame = new JFrame();
 		frame.setBounds(100, 100, 972, 688);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -289,7 +329,7 @@ public class StartUpGUI extends ApplicationTemplateTest{
 
 		// Setup a select listener for the worldmap click-and-go feature
 		wwd.addSelectListener(new ClickAndGoSelectListener(wwd, WorldMapLayer.class));
-		
+
 		//Sticklayer.setName("Pole");
 		Sticklayer = new RenderableLayer();
 		Sticklayer.setName("pole");
@@ -297,6 +337,28 @@ public class StartUpGUI extends ApplicationTemplateTest{
 		
         
 		initialize();
+		
+		
+		//CITYGML RENDERING:
+		//beforeStart();
+		LoadCityGML();
+		
+		datalayerPanel.update(getWwd());
+		
+		List<Double> centerCameraLOCAL = Utils.getCameraInitCoordinates(Properties.evelope);
+		List<Double> centerCamera = PointTransformDao.getTranformation(centerCameraLOCAL);
+		
+		Double lat = centerCamera.get(1);
+		Double log = centerCamera.get(0);
+		Double height = centerCamera.get(2);
+		
+		//LatLon latlon = LatLon.fromDegrees(lat, log);
+		//BasicOrbitView view = (BasicOrbitView) StartUpGUI.wwd.getView();
+		//Position p = view.getEyePosition();
+		//System.out.println("EyePosition:"+view.getEyePosition().getLatitude().degrees+","+view.getEyePosition().getLongitude().degrees);
+		//view.addEyePositionAnimator(4000, view.getEyePosition(), new Position(latlon, height));
+				
+		
 	}
 
 	public static void initialize(){
@@ -705,9 +767,20 @@ public class StartUpGUI extends ApplicationTemplateTest{
 
 	}
 
-	public static void LoadCityGML(StartUp start){
+	//TODO: Add the new building rendering method here, from the rendercitygml project:
+	public void LoadCityGML(){
 		
-		RenderableLayer layer = new RenderableLayer();
+//		RenderMultipleBuildings.renderAllAtOnce();
+		//addTiles();
+		
+		addGeometry();
+		Properties.buildingsLayer.setName("Building Layer");
+		insertBeforePlacenames(getWwd(), Properties.tilesLayer);
+		insertBeforePlacenames(getWwd(), Properties.buildingsLayer);
+		
+		datalayerPanel.update(getWwd());
+
+		/*RenderableLayer layer = new RenderableLayer();
         
         //RenderingBuildingSurface
         try {
@@ -723,7 +796,20 @@ public class StartUpGUI extends ApplicationTemplateTest{
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
+	}
+	private static void addGeometry() {
+		WorldWindow wwd = getWwd();
+		//this is listening to the mouse events::
+		getWwd().getInputHandler().addMouseListener(new MousePressedMovedEvent(wwd));
+		System.out.println("added the mouse listener");
+	}
+	private void addTiles(){
+		List<Tile> tiles = GetTiles.getTiles();
+		RenderTilesGrid.renderTiles(tiles);
+	}
+	public static WorldWindow getWwd(){
+		return wwd;
 	}
 	/**
 	 * Launch the application.
@@ -734,8 +820,13 @@ public class StartUpGUI extends ApplicationTemplateTest{
 			public void run() {
 				try {
 					//StartUp start = new StartUp();
+					Configuration.setValue(AVKey.INITIAL_LATITUDE, 52.54502960984476);
+					Configuration.setValue(AVKey.INITIAL_LONGITUDE, 13.481371359468982);
+					Configuration.setValue(AVKey.INITIAL_ALTITUDE, 600);
+					
 					StartUpGUI window = new StartUpGUI();
 					window.frame.setVisible(true);
+					
 					//LoadCityGML(start);
 				} catch (Exception e) {
 					e.printStackTrace();

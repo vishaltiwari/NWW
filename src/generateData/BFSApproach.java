@@ -3,6 +3,7 @@ package generateData;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.Raster;
+import java.awt.image.SampleModel;
 import java.awt.image.WritableRaster;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -92,13 +93,13 @@ public class BFSApproach {
 		}
 	}
 	
-	public void saveHeightMap(int imageCount) throws IOException{
+	public void saveHeightMap(int imageCount,int val) throws IOException{
 		
 		int[] currValue = new int[1];
 		int[] buffer = new int[1];
 		
-		String filename = "/home/vishal/Desktop/Grass_Output/images/"+imageCount+".tif";
-		
+		String filename = "/home/vishal/Desktop/Grass_Output/images5/"+imageCount+".tif";
+		System.out.println(filename);
 		//create the data that you want to copy
 		ColorModel cm = img.getColorModel();
 		boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
@@ -112,7 +113,7 @@ public class BFSApproach {
 			for(int x=0 ; x < this.width ; x++){
 				if(visited[y][x]==true){
 					currValue = raster.getPixel(x, y, buffer);
-					newHeight[0] = currValue[0] + addHeight;
+					newHeight[0] = currValue[0] + val;
 					raster.setPixel(x, y, newHeight);
 				}
 			}
@@ -164,7 +165,7 @@ public class BFSApproach {
 		
 		visited[this.startPoint.y][this.startPoint.x] = true;
 		myqueue.add(this.startPoint);
-		
+		int val=1;
 		while(!myqueue.isEmpty()){
 			Pair curr = myqueue.remove();
 			// i ,j is the position of the
@@ -182,7 +183,8 @@ public class BFSApproach {
 					
 					//save the image:
 					try {
-						saveHeightMap(imageCount);
+						saveHeightMap(imageCount,val);
+						val++;
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
@@ -196,7 +198,7 @@ public class BFSApproach {
 		int x=100; int y=10;
 		Pair pair = new Pair(x,y);
 		//String filename = "/home/vishal/NWW/sampleData/floodPolygon2.tif";
-		String filename = "/home/vishal/Desktop/Grass_Output/testElevationLive.tif";
+		String filename = "/home/vishal/Desktop/Grass_Output/testElevation.tif";
 		BFSApproach obj = new BFSApproach(filename,pair);
 		obj.generateByBFS();
 	}

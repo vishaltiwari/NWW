@@ -96,26 +96,27 @@ public class WaterMeshRender extends ApplicationTemplate{
 
             RenderableLayer layer = new RenderableLayer();
             //Cube cube = new Cube(Position.fromDegrees(35.0, -120.0, 3000), 1000);
-            Position pos = new Position(Angle.fromDegrees(0),Angle.fromDegrees(0),100);
+            Position pos = new Position(Angle.fromDegrees(10.1945224),Angle.fromDegrees(34.5845962),2000);
             String filename = "/home/vishal/NWW/sampleData/DSM.png";
             float[] DSMColor = {1,1,1};
             float[] floodColor = {0,0,1};
             float[] terrainColor = {0,1,0};
             float[] buildingCoor = {0.5f,0.3f,0.0f};
-            MeshClass terrain = new MeshClass("/home/vishal/NWW/sampleData/Createdheightmap.png",pos,terrainColor);
+            MeshClass terrain = new MeshClass("/home/vishal/Desktop/Grass_Output/8bit.tif",pos,terrainColor);
             
-            MeshClass DSM = new MeshClass(filename,pos,DSMColor);
-            MeshClass floodMap = new MeshClass("/home/vishal/NWW/sampleData/floodPolygon2.png",pos,floodColor);
-            WaterMeshRender pol = new WaterMeshRender();
+            //MeshClass DSM = new MeshClass(filename,pos,DSMColor);
+            //MeshClass floodMap = new MeshClass("/home/vishal/NWW/sampleData/floodPolygon2.png",pos,floodColor);
+            //WaterMeshRender pol = new WaterMeshRender();
             
-            MeshClass buildings = pol.CalculateWaterArea(terrain, DSM,buildingCoor,"building");
-            MeshClass floodarea = pol.CalculateWaterArea(DSM, floodMap,floodMap.getColorArr(),"flood");
-            System.out.println(floodarea.getWidth() + " "+floodarea.getHeight());
+            //MeshClass buildings = pol.CalculateWaterArea(terrain, DSM,buildingCoor,"building");
+            //MeshClass floodarea = pol.CalculateWaterArea(DSM, floodMap,floodMap.getColorArr(),"flood");
+            //System.out.println(floodarea.getWidth() + " "+floodarea.getHeight());
             
-            System.out.println("coordCount "+floodarea.getCoordCount() + " indx count:"+floodarea.getIndexCount()+ " count");
-            layer.addRenderable(buildings);
-            layer.addRenderable(DSM);
-            layer.addRenderable(floodarea);
+//            System.out.println("coordCount "+floodarea.getCoordCount() + " indx count:"+floodarea.getIndexCount()+ " count");
+  //          layer.addRenderable(buildings);
+    //        layer.addRenderable(DSM);
+      //      layer.addRenderable(floodarea);
+            layer.addRenderable(terrain);
             
             //pol.print(floodarea);
 
@@ -124,8 +125,8 @@ public class WaterMeshRender extends ApplicationTemplate{
     }   
 	
 	public static void main(String argv[]){
-		Configuration.setValue(AVKey.INITIAL_LATITUDE, 0);
-		Configuration.setValue(AVKey.INITIAL_LONGITUDE, 0);
+		Configuration.setValue(AVKey.INITIAL_LATITUDE, 10.1945224);
+		Configuration.setValue(AVKey.INITIAL_LONGITUDE, 34.5845962);
 		Configuration.setValue(AVKey.INITIAL_ALTITUDE, 15500);
 		Configuration.setValue(AVKey.INITIAL_PITCH, 45);
 		Configuration.setValue(AVKey.INITIAL_HEADING, 45);

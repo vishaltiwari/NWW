@@ -51,13 +51,15 @@ public class AnalyticMeshDemo extends ApplicationTemplate{
             this.getLayerPanel().update(this.getWwd());
 
             //Create Height Surface
-            String file1 = "/home/vishal/NWW/sampleData/DSM.png";
-            String file2 = "/home/vishal/NWW/sampleData/floodPolygon.png";
-            //createTerrainSurface(HUE_BLUE, HUE_RED, 40, 40, file1, this.analyticSurfaceLayer);
+            //String file1 = "/home/vishal/NWW/sampleData/DSM.png";
+            String file2 = "/home/vishal/NWW/sampleData/floodPolygon2.tif";
+            //String file1 = "/home/vishal/Desktop/Grass_Output/images/200.tif";
+            //String file2 = "/home/vishal/Desktop/Grass_Output/images/20.tif";
+            createTerrainSurface(HUE_BLUE, HUE_RED, 512, 512, file2, this.analyticSurfaceLayer);
             //createTerrainSurface(HUE_BLUE, HUE_RED, 40, 40, file2, this.analyticSurfaceLayer);	
             
             //Interpolate from one to another:
-            overTimeVariation(HUE_BLUE, HUE_RED, 40, 40, file1,file2, this.analyticSurfaceLayer);
+            //overTimeVariation(HUE_BLUE, HUE_RED, 40, 40, file1,file2, this.analyticSurfaceLayer);
             //WaterSurfaceModel waterModel1 = new WaterSurfaceModel(file1);
         	//WaterSurfaceModel waterModel2 = new WaterSurfaceModel(file2);
         	
@@ -189,8 +191,9 @@ public class AnalyticMeshDemo extends ApplicationTemplate{
         //AnalyticSurface.GridPointAttributes = new AnalyticSurface.GridPointAttributes();
         
         double minValue = 0;
-        double maxValue = 255*1000;
+        double maxValue = 255;
 
+        //coloring the surface
         int size = waterModel.getWidth() * waterModel.getHeight();
         float[] heightMap = waterModel.getHeightMap();
         for(int i=0 ; i<size ; i++){

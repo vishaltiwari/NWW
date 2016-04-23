@@ -1,0 +1,33 @@
+controller/CrsConverterGDAL.java:	public double[] convertCoordinate(String srcProj,String desProj,double[] coordinate){
+controller/CrsConverterGDAL.java:		coord = obj.convertCoordinate("3068", "WGS84", coord);
+controller/ElevationExtractor.java:    	origin = obj.convertCoordinate("+proj=utm +zone=45 +ellps=WGS72 +towgs84=0,0,4.5,0,0,0.554,0.2263 +units=m +no_defs", "WGS84", origin);
+controller/ElevationExtractor.java:		coord = obj.convertCoordinate("+proj=utm +zone=45 +ellps=WGS72 +towgs84=0,0,4.5,0,0,0.554,0.2263 +units=m +no_defs", "WGS84", coord);
+controller/StartUp.java:			double[] arr = convert.convertCoordinate("+proj=utm +zone=45 +ellps=WGS72 +towgs84=0,0,4.5,0,0,0.554,0.2263 +units=m +no_defs", "WGS84", coord.getCoords());
+controller/CrsConverter.java:	public static double[] convertCoordinate(String srcProj,String desProj,double[] coordinate){
+gui/ImportCityGMLJDialog.java:											coords = CrsConverter.convertCoordinate(EPSGCodeTextField.getText(),"WGS84",center);
+render/RenderBuildingRoofs.java:					coordinate = convert.convertCoordinate("not using", "not using", coordinate);
+render/ManualFeatures.java:        //pos = convert.convertCoordinate("+proj=utm +zone=45 +ellps=WGS72 +towgs84=0,0,4.5,0,0,0.554,0.2263 +units=m +no_defs", "WGS84", posList);
+render/ManualFeatures.java:        	pos = convert.convertCoordinate("+proj=utm +zone=45 +ellps=WGS72 +towgs84=0,0,4.5,0,0,0.554,0.2263 +units=m +no_defs", "WGS84", posList);
+render/ManualFeatures.java:        pos = convert.convertCoordinate("+proj=utm +zone=45 +ellps=WGS72 +towgs84=0,0,4.5,0,0,0.554,0.2263 +units=m +no_defs", "WGS84", posList);
+render/ManualFeatures.java:        pos = convert.convertCoordinate("+proj=utm +zone=45 +ellps=WGS72 +towgs84=0,0,4.5,0,0,0.554,0.2263 +units=m +no_defs", "WGS84", posList);
+render/ManualFeatures.java:        	pos = convert.convertCoordinate("+proj=utm +zone=45 +ellps=WGS72 +towgs84=0,0,4.5,0,0,0.554,0.2263 +units=m +no_defs", "WGS84", posList);
+render/ManualFeatures.java:        pos = convert.convertCoordinate("+proj=utm +zone=45 +ellps=WGS72 +towgs84=0,0,4.5,0,0,0.554,0.2263 +units=m +no_defs", "WGS84", posList);
+render/ManualFeatures.java:        double[] pos = convert.convertCoordinate("+proj=utm +zone=45 +ellps=WGS72 +towgs84=0,0,4.5,0,0,0.554,0.2263 +units=m +no_defs", "WGS84", posList);
+render/ManualFeatures.java:        pos = convert.convertCoordinate("+proj=utm +zone=45 +ellps=WGS72 +towgs84=0,0,4.5,0,0,0.554,0.2263 +units=m +no_defs", "WGS84", posList);
+render/ManualFeatures.java:        pos = convert.convertCoordinate("+proj=utm +zone=45 +ellps=WGS72 +towgs84=0,0,4.5,0,0,0.554,0.2263 +units=m +no_defs", "WGS84", posList);
+render/ManualFeatures.java:        	pos = convert.convertCoordinate("+proj=utm +zone=45 +ellps=WGS72 +towgs84=0,0,4.5,0,0,0.554,0.2263 +units=m +no_defs", "WGS84", posList);
+render/ManualFeatures.java:        pos = convert.convertCoordinate("+proj=utm +zone=45 +ellps=WGS72 +towgs84=0,0,4.5,0,0,0.554,0.2263 +units=m +no_defs", "WGS84", posList);
+render/ManualFeatures.java:        double[] points = convert.convertCoordinate("+proj=utm +zone=45 +ellps=WGS72 +towgs84=0,0,4.5,0,0,0.554,0.2263 +units=m +no_defs", "WGS84", upperCorner);
+render/ManualFeatures.java:        points = convert.convertCoordinate("+proj=utm +zone=45 +ellps=WGS72 +towgs84=0,0,4.5,0,0,0.554,0.2263 +units=m +no_defs", "WGS84", leftCorner);
+render/ManualFeatures.java:        points = convert.convertCoordinate("+proj=utm +zone=45 +ellps=WGS72 +towgs84=0,0,4.5,0,0,0.554,0.2263 +units=m +no_defs", "WGS84", lowerCorner);
+render/ManualFeatures.java:        points = convert.convertCoordinate("+proj=utm +zone=45 +ellps=WGS72 +towgs84=0,0,4.5,0,0,0.554,0.2263 +units=m +no_defs", "WGS84", rightCorner);
+render/ManualFeatures.java:        points = convert.convertCoordinate("+proj=utm +zone=45 +ellps=WGS72 +towgs84=0,0,4.5,0,0,0.554,0.2263 +units=m +no_defs", "WGS84", upperCorner);
+render/RenderingBuildingSurface.java:				polygon = convert.convertCoordinate("not using", "not using", polygon);
+render/RenderingBuildingWalls.java:					coordinate = convert.convertCoordinate("not using", "not using", coordinate);
+render/RenderObjects.java:				double[] arr = convert.convertCoordinate("+proj=utm +zone=45 +ellps=WGS72 +towgs84=0,0,4.5,0,0,0.554,0.2263 +units=m +no_defs", "WGS84", coord.getCoords());
+render/RenderObjects.java:				double[] arr = convert.convertCoordinate("+proj=utm +zone=45 +ellps=WGS72 +towgs84=0,0,4.5,0,0,0.554,0.2263 +units=m +no_defs", "WGS84", coord.getCoords());
+render/RenderObjects.java:				double[] arr = convert.convertCoordinate("+proj=utm +zone=45 +ellps=WGS72 +towgs84=0,0,4.5,0,0,0.554,0.2263 +units=m +no_defs", "WGS84", coord.getCoords());
+render/RenderObjects.java:				double[] arr = convert.convertCoordinate("+proj=utm +zone=45 +ellps=WGS72 +towgs84=0,0,4.5,0,0,0.554,0.2263 +units=m +no_defs", "WGS84", coord.getCoords());
+render/RenderObjects.java:				double[] arr = convert.convertCoordinate("something", "crap", coord.getCoords());
+waterSurfaceModel/SampleAsciiCreator.java:		coord1 = obj.convertCoordinate("+proj=utm +zone=45 +ellps=WGS72 +towgs84=0,0,4.5,0,0,0.554,0.2263 +units=m +no_defs", "WGS84", coord1);
+waterSurfaceModel/SampleAsciiCreator.java:		coord2 = obj.convertCoordinate("+proj=utm +zone=45 +ellps=WGS72 +towgs84=0,0,4.5,0,0,0.554,0.2263 +units=m +no_defs", "WGS84", coord2);

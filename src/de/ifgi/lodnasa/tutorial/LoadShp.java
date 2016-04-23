@@ -33,6 +33,7 @@ public class LoadShp extends ApplicationTemplate{
 			Shapefile shapefile = new Shapefile(file);
 			
 			RenderableLayer layer = new RenderableLayer();
+			layer.setName("IIIT");
 			//set the basic attributes for the polygon
             ShapeAttributes normalAttributes = new BasicShapeAttributes();
             
