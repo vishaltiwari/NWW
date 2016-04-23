@@ -46,6 +46,7 @@ import gui.HydroGraphJDialog;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
@@ -72,6 +73,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
+import javax.swing.SwingWorker;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -84,6 +86,7 @@ import render.RenderAnalyticSurface;
 import render.RenderObjects;
 import waterSurfaceModel.SurfaceModelClass;
 import citygmlModel.BuildingsClass;
+import citygmlModel.MultipleBuildingsFileClass;
 import dao.ChangeSRIDTables;
 import dao.GetBuildingEnvelope;
 import dao.GetTiles;
@@ -341,9 +344,9 @@ public class StartUpGUI extends ApplicationTemplateTest{
 		
 		//CITYGML RENDERING:
 		//beforeStart();
-		LoadCityGML();
+		//LoadCityGML();
 		
-		datalayerPanel.update(getWwd());
+		//datalayerPanel.update(getWwd());
 		
 		List<Double> centerCameraLOCAL = Utils.getCameraInitCoordinates(Properties.evelope);
 		List<Double> centerCamera = PointTransformDao.getTranformation(centerCameraLOCAL);
@@ -372,9 +375,84 @@ public class StartUpGUI extends ApplicationTemplateTest{
 		JMenuItem mntmImport = new JMenuItem("Import");
 		mntmImport.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				ImportCityGMLJDialog dialog = new ImportCityGMLJDialog();
-				dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-				dialog.setVisible(true);
+				//ImportCityGMLJDialog dialog = new ImportCityGMLJDialog();
+				//dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+				//dialog.setVisible(true);
+				//Render the citygml data.
+				try {
+					class ImportCityGMLThread extends SwingWorker<Void,Object>{
+
+						protected Void doInBackground() throws Exception {
+							addGeometry();
+							return null;
+						}
+						
+						@Override
+						protected void done(){
+							try{
+								insertBeforePlacenames(getWwd(), Properties.tilesLayer);
+								insertBeforePlacenames(getWwd(), Properties.buildingsLayer);
+								
+								datalayerPanel.update(getWwd());
+								
+								List<Double> centerCameraLOCAL = Utils.getCameraInitCoordinates(Properties.evelope);
+								List<Double> centerCamera = PointTransformDao.getTranformation(centerCameraLOCAL);
+								
+								Double lat = centerCamera.get(1);
+								Double log = centerCamera.get(0);
+								Double height = centerCamera.get(2);
+								
+								LatLon latlon = LatLon.fromDegrees(lat, log);
+								
+								BasicOrbitView view = (BasicOrbitView) StartUpGUI.wwd.getView();
+								System.out.println("EyePosition:"+view.getEyePosition().getLatitude().degrees+","+view.getEyePosition().getLongitude().degrees);
+								view.addEyePositionAnimator(
+										4000, view.getEyePosition(), new Position(latlon, height));
+								
+
+								//RenderAnalyticSurface waterSurface = new RenderAnalyticSurface("/home/vishal/Desktop/Grass_Output/01a_07_15.tif");
+					            //RenderableLayer waterlayer = waterSurface.renderWaterSurface("/home/vishal/Desktop/Grass_Output/images10");
+					            
+					            //StartUpGUI.insertBeforePlacenames(StartUpGUI.wwd, waterlayer);
+								
+								//setViewer(StartUpGUI.wwd,orbitViewer,true);
+								/*try{
+								FlyToFlyViewAnimator animator =
+				                        FlyToFlyViewAnimator.createFlyToFlyViewAnimator(view,
+				                            view.getEyePosition(),
+				                            new Position(latlon, height),
+				                            view.getHeading(), view.getHeading(),
+				                            view.getPitch(), view.getPitch(),
+				                            view.getEyePosition().getElevation(), view.getEyePosition().getElevation(),
+				                            10000, WorldWind.ABSOLUTE);
+								
+								view.addAnimator(animator);
+			                    animator.start();
+			                    
+			                    view.firePropertyChange(AVKey.VIEW, null, view);
+								}
+								catch(Exception e){
+									e.printStackTrace();
+								}*/
+							}
+							catch(Exception e){
+								JOptionPane.showMessageDialog(new JDialog(), "OOPS, error in Importing data", "Dialog",
+								        JOptionPane.ERROR_MESSAGE);
+								e.printStackTrace();
+							}
+							finally{
+								System.out.println("Done with the import operation");
+							}
+						}
+					}
+					ImportCityGMLThread task = new ImportCityGMLThread();
+
+					task.execute();
+				} catch (Exception e1) {
+					JOptionPane.showMessageDialog(new JDialog(), "OOPS, error in running the thread", "Dialog",
+					        JOptionPane.ERROR_MESSAGE);
+					e1.printStackTrace();
+				}
 			}
 		});
 		mnFile.add(mntmImport);
