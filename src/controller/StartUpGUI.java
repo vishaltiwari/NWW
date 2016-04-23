@@ -407,6 +407,7 @@ public class StartUpGUI extends ApplicationTemplateTest{
 							//InsertTileBuildingMappingdao.mapBuildingsToTiles();
 							Map<Integer,PGgeometry> mapping = GetBuildingEnvelope.getBuildingEvnveoples();
 							BuildingsManager.buildingMappingToTile(mapping);*/
+							///////////
 							
 							addGeometry();
 							return null;
