@@ -14,11 +14,13 @@ export GDAL_DATA="", or one can load them in the main function.
 
 - One can query for depth values and create hydrographs by clicking on points on interest on the ROI.
 
-#Results:
-[![Top View](http://img.youtube.com/vi/U7mCD743LYI/0.jpg)](http://www.youtube.com/watch?v=U7mCD743LYI)
+Results:
 
-[![Slant View](http://img.youtube.com/vi/TcXzJTHYB1g/0.jpg)](http://www.youtube.com/watch?v=TcXzJTHYB1g)
 
-[![Street View](http://img.youtube.com/vi/XkrBYgpxB8k/0.jpg)](http://www.youtube.com/watch?v=iXkrBYgpxB8k)
+[![Top View](http://img.youtube.com/vi/U7mCD743LYI/0.jpg)](https://youtu.be/U7mCD743LYI)
+
+[![Slant View](http://img.youtube.com/vi/TcXzJTHYB1g/0.jpg)](https://youtu.be/TcXzJTHYB1g)
+
+[![Street View](http://img.youtube.com/vi/XkrBYgpxB8k/0.jpg)](https://youtu.be/XkrBYgpxB8k)
 
 
