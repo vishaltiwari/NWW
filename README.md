@@ -25,12 +25,12 @@ Note: This is a framework for the visualization of your hydrological simulation 
 
 # Video Links
 
-[![Top View](https://imgur.com/a/q0qfA)](https://youtu.be/U7mCD743LYI)
+[![Top View](https://i.imgur.com/zJNXNIj.png)](https://youtu.be/U7mCD743LYI)
 
 
-[![Slant View](http://img.youtube.com/vi/TcXzJTHYB1g/0.jpg)](https://youtu.be/TcXzJTHYB1g)
+[![Slant View](https://i.imgur.com/Hh9HWPk.png)](https://youtu.be/TcXzJTHYB1g)
 
 
-[![Street View](http://img.youtube.com/vi/XkrBYgpxB8k/0.jpg)](https://youtu.be/XkrBYgpxB8k)
+[![Street View](https://i.imgur.com/n0XCuAe.png)](https://youtu.be/XkrBYgpxB8k)
 
 
