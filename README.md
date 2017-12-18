@@ -1,9 +1,9 @@
 # About
 In this work, we present a 4D GIS system to visualize space-time dependent phenomena - simulated hydrological water flow model over an urban area. This work attempts to use the calculated water depth information to present a nearreal visual rendering of the same, with the emphasis on the visual interaction of the 3D objects (buildings) with such phenomenon captured in 4D (space and time). The developed system is built using the NASA’s WorldWind Globe and uses a depth filling algorithm as its input for time-step generated water depth maps, the dynamic layer. The urban scene is derived from a static CityGML LOD2 buildings layer overlaid on the digital elevation map. The dynamic flow visualization is enabled through an appropriate color mapping scheme so that the user can have a fair sense of water depth at various areas of the city over the time period. While visualization helps to understand the phenomenon and its progress, it is also important to provide an appropriate mechanism to derive or extract the relevant technical information from such a system. Towards this, in the developed system, analytical tools like querying for water depth at any given time, displaying of hydrographs showing the variation of height over time at a given location and a slider to control the time parameter of the system, have been incorporated. As the system uses 3DcityDB as the storage model, it is highly expendable for answering complex queries like ”which buildings of a specific area of the city will get flooded and when ?”. Such queries are not yet built in and is left for further work. 
 
-Link to older webpage: http://lsi.iiit.ac.in/worldwind/?page_id=8
+Link to older [webpage](http://lsi.iiit.ac.in/worldwind/?page_id=8)
 
-For more details: http://web2py.iiit.ac.in/research_centres/publications/view_publication/mastersthesis/481
+More details see [thesis](http://web2py.iiit.ac.in/research_centres/publications/view_publication/mastersthesis/481)
 
 # Project Setup
 - Open this project in your eclipse as : File -> import -> From Existing Project into Workspace, and point to the clone directory.
